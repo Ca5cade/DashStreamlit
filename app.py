@@ -381,7 +381,10 @@ def create_filters(data):
         with col4:
             # Controller filter
             st.subheader("Contrôleur")
-            if 'IDcontroleur' in data.columns:
+            if 'idcontroleur' in data.columns:
+                controller_options = sorted(data['idcontroleur'].astype(str).unique().tolist())
+                selected_controllers = st.multiselect("Select controllers", options=controller_options)
+            elif 'IDcontroleur' in data.columns:
                 controller_options = sorted(data['IDcontroleur'].astype(str).unique().tolist())
                 selected_controllers = st.multiselect("Select controllers", options=controller_options)
             elif 'IDControleur' in data.columns:
@@ -767,7 +770,9 @@ def create_dashboard_charts(filtered_data, metrics):
     # Controller tab
     with category_tabs[2]:
         controller_col = None
-        if 'IDcontroleur' in filtered_data.columns and not filtered_data.empty:
+        if 'idcontroleur' in filtered_data.columns and not filtered_data.empty:
+            controller_col = 'idcontroleur'
+        elif 'IDcontroleur' in filtered_data.columns and not filtered_data.empty:
             controller_col = 'IDcontroleur'
         elif 'IDControleur' in filtered_data.columns and not filtered_data.empty:
             controller_col = 'IDControleur'
@@ -854,6 +859,7 @@ def create_analytics_page(data):
             {'label': 'Chaîne', 'value': 'IDchainemontage'},
             {'label': 'Chaîne', 'value': 'Chaine'},
             {'label': 'Opération', 'value': 'Operation'},
+            {'label': 'Contrôleur', 'value': 'idcontroleur'},
             {'label': 'Contrôleur', 'value': 'IDcontroleur'},
             {'label': 'Contrôleur', 'value': 'IDControleur'},
             {'label': 'Contrôleur', 'value': 'Controleur'},

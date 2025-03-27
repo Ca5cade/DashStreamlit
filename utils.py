@@ -87,7 +87,9 @@ def apply_all_filters(data, filters):
         filtered_data = apply_categorical_filter(filtered_data, 'Operation', filters.get("operations"))
     
     if filters.get("controllers"):
-        if 'IDcontroleur' in filtered_data.columns:
+        if 'idcontroleur' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'idcontroleur', filters.get("controllers"))
+        elif 'IDcontroleur' in filtered_data.columns:
             filtered_data = apply_categorical_filter(filtered_data, 'IDcontroleur', filters.get("controllers"))
         elif 'IDControleur' in filtered_data.columns:
             filtered_data = apply_categorical_filter(filtered_data, 'IDControleur', filters.get("controllers"))
