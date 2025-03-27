@@ -1,0 +1,468 @@
+/* Global Styles */
+:root {
+    --primary-color: #2dcecc;
+    --bg-dark: #1a1f37;
+    --card-bg: #242b4a;
+    --card-header: #2a325a;
+    --text-muted: rgba(255, 255, 255, 0.6);
+  }
+  
+  body {
+    background-color: var(--bg-dark);
+    font-family: "Inter", sans-serif;
+    color: white;
+  }
+  
+  /* Analytics Form Styles */
+  .form-card {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .form-card .card-header {
+    background-color: var(--card-header);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Form Fields Styling */
+  .form-group label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  /* Dropdown Styling */
+  .Select-control {
+    background-color: var(--card-bg) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  .Select-menu-outer {
+    background-color: var(--card-bg) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  /* Table Styling */
+  .ag-theme-alpine-dark {
+    --ag-background-color: var(--card-bg);
+    --ag-header-background-color: var(--card-header);
+    --ag-odd-row-background-color: rgba(255, 255, 255, 0.05);
+    --ag-header-foreground-color: var(--text-muted);
+    --ag-border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Date Picker Styling */
+  .DateInput {
+    background-color: var(--card-bg) !important;
+  }
+  
+  .DateInput_input {
+    background-color: var(--card-bg) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+  }
+  
+  .company-name {
+    position: relative;
+    top: 125px;
+  }
+  
+  #dashy {
+    position: relative;
+    right: 13px;
+  }
+  
+  #logout-button {
+    position: relative;
+  }
+  
+  /* Login Page Styles */
+  .login-container {
+    background: linear-gradient(135deg, var(--bg-dark) 0%, #2a325a 100%);
+    min-height: 100vh;
+  }
+  
+  .login-card {
+    background-color: var(--card-bg);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .login-input {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-radius: 0.75rem !important;
+    padding: 1rem !important;
+    transition: all 0.2s ease;
+  }
+  
+  .login-input:focus {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(45, 206, 204, 0.25) !important;
+  }
+  
+  .login-input::placeholder {
+    color: var(--text-muted);
+  }
+  
+  .company-title {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .login-button {
+    background-color: var(--primary-color) !important;
+    border: none !important;
+    padding: 1rem !important;
+    border-radius: 0.75rem !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 206, 204, 0.25);
+  }
+  
+  /* Dashboard Container */
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    background-color: var(--card-bg);
+    height: 100vh;
+    padding: 2rem;
+    position: fixed;
+    width: inherit;
+    max-width: inherit;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+  }
+  
+  .sidebar-title {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+  }
+  
+  .sidebar-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+    margin: 1.5rem 0;
+  }
+  
+  .nav-link {
+    color: var(--text-muted) !important;
+    padding: 0.875rem 1.25rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(45, 206, 204, 0.1);
+    color: white !important;
+  }
+  
+  .nav-link.active {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(45, 206, 204, 0.25);
+  }
+  
+  /* Main Content */
+  .main-content {
+    padding: 2rem;
+  }
+  
+  /* Cards */
+  .header-card,
+  .filter-card,
+  .metric-card,
+  .chart-card {
+    background-color: var(--card-bg);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Filter Card */
+  .filter-card {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: 1.5rem;
+    height: auto;
+    min-height: 150px;
+  }
+  
+  .filter-card .card-body {
+    padding: 1.5rem;
+  }
+  
+  .filter-dropdown {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 0.5rem;
+  }
+  
+  .filter-dropdown:hover {
+    border-color: var(--primary-color);
+  }
+  
+  .filter-label {
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  .filter-status {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-align: center;
+  }
+  
+  .filter-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  
+  .card-header {
+    background-color: var(--card-header);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.25rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+    height: auto;
+  }
+  
+  /* Chart body with fixed height */
+  .chart-body-fixed {
+    padding: 1.5rem;
+    height: 400px !important; /* Force fixed height */
+    max-height: 400px !important; /* Prevent expansion */
+    overflow: hidden; /* Prevent content from expanding container */
+  }
+  
+  /* Company Logo */
+  .company-logo {
+    height: 140px;
+    margin-right: 1.5rem;
+  }
+  
+  /* Chart Cards */
+  .chart-card {
+    background-color: var(--card-bg);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    height: auto !important; /* Prevent automatic height expansion */
+    max-height: 450px !important; /* Include header + body + padding */
+  }
+  
+  /* Chart container */
+  .chart-container {
+    width: 100% !important;
+    height: 350px !important; /* Fixed height */
+    max-height: 350px !important; /* Prevent expansion */
+  }
+  
+  /* Prevent Plotly from resizing charts */
+  .js-plotly-plot,
+  .plot-container {
+    height: 350px !important;
+    max-height: 350px !important;
+  }
+  
+  /* Metrics */
+  .metric-card {
+    background-color: var(--card-bg);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
+    margin-bottom: 1rem;
+    height: 100%;
+  }
+  
+  .metric-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .metric-title {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .metric-description {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+  
+  .metric-value {
+    color: white;
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Fix for gauge chart */
+  #gauge-chart {
+    position: relative;
+    width: 100% !important;
+    height: 350px !important;
+    max-height: 350px !important;
+  }
+  
+  /* Fix for pie chart */
+  #pie-chart {
+    position: relative;
+    width: 100% !important;
+    height: 350px !important;
+    max-height: 350px !important;
+  }
+  
+  /* Fix for line chart */
+  #line-chart {
+    position: relative;
+    width: 100% !important;
+    height: 350px !important;
+    max-height: 350px !important;
+  }
+  
+  /* Charts */
+  .btn-outline-primary,
+  .btn-outline-info {
+    color: var(--text-muted);
+    border-color: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-outline-primary:hover,
+  .btn-outline-info:hover {
+    background-color: rgba(45, 206, 204, 0.1);
+    border-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* Date Range Picker Styling */
+  .DateRangePickerInput {
+    background-color: var(--card-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0.5rem !important;
+  }
+  
+  .DateRangePickerInput_arrow {
+    color: var(--text-muted) !important;
+  }
+  
+  .DateInput_input {
+    font-size: 0.9rem !important;
+    padding: 0.5rem !important;
+    color: white !important;
+  }
+  
+  .CalendarDay__selected,
+  .CalendarDay__selected:hover {
+    background: var(--primary-color) !important;
+    border: 1px solid var(--primary-color) !important;
+  }
+  
+  .CalendarDay__selected_span {
+    background: rgba(45, 206, 204, 0.5) !important;
+    border: 1px solid rgba(45, 206, 204, 0.5) !important;
+  }
+  
+  /* Additional Filter Styles */
+  #toggle-filters-button,
+  #reset-filters-button {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 0;
+  }
+  
+  #toggle-filters-button:hover,
+  #reset-filters-button:hover {
+    text-decoration: underline;
+  }
+  
+  #reset-filters-button {
+    color: #ff6b6b;
+  }
+  
+  #additional-filters {
+    transition: all 0.3s ease;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .dashboard-container {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .sidebar {
+      position: static;
+      height: auto;
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .main-content {
+      margin-left: 0;
+      padding: 1rem;
+    }
+  
+    .chart-card,
+    .metric-card,
+    .filter-card {
+      margin-bottom: 1rem;
+    }
+  }
+  
+  

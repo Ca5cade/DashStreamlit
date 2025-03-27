@@ -1,0 +1,82 @@
+/* Data Filter Styles */
+
+/* Filter Card */
+.filter-card {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Visualization Container */
+  .visualization-container {
+    min-height: 500px;
+    position: relative;
+  }
+  
+  /* Data Table Card */
+  .data-table-card {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Filter Components */
+  .filter-component {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Filter Status */
+  .filter-status-message {
+    font-size: 0.9rem;
+  }
+  
+  /* Filter Progress */
+  .filter-progress {
+    height: 0.5rem;
+  }
+  
+  /* Filter Buttons */
+  .filter-btn {
+    transition: all 0.2s ease;
+  }
+  
+  .filter-btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Filter Tabs */
+  .filter-tabs .nav-link {
+    color: var(--text-muted);
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border-radius: 0;
+  }
+  
+  .filter-tabs .nav-link:hover {
+    color: white;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: transparent;
+  }
+  
+  .filter-tabs .nav-link.active {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-bottom: 2px solid var(--primary-color);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .visualization-container {
+      min-height: 300px;
+    }
+  }
+  
+  
