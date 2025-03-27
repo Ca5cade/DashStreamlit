@@ -106,7 +106,17 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
                 performance = retouche_count / max(1, total_qty) * 100
             else:
                 # Generate random performance between 1-15% for demo
-                performance = (op_id % 15) + 1
+                # Safely generate a random-like value for any type of op_id
+                if isinstance(op_id, str):
+                    # Use hash of string to generate consistent random-like value
+                    op_hash = sum(ord(c) for c in op_id)
+                    performance = (op_hash % 15) + 1
+                elif isinstance(op_id, (int, float)):
+                    # Use modulo for numeric values
+                    performance = (int(op_id) % 15) + 1
+                else:
+                    # Fallback for any other type
+                    performance = 5
         else:
             # For encours_chaine
             if operation_column and 'TypeControle' in filtered_data.columns:
@@ -124,7 +134,17 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
                 performance = retouche_count / max(1, total_qty) * 100
             else:
                 # Generate random performance between 1-15% for demo
-                performance = (op_id % 15) + 1
+                # Safely generate a random-like value for any type of op_id
+                if isinstance(op_id, str):
+                    # Use hash of string to generate consistent random-like value
+                    op_hash = sum(ord(c) for c in op_id)
+                    performance = (op_hash % 15) + 1
+                elif isinstance(op_id, (int, float)):
+                    # Use modulo for numeric values
+                    performance = (int(op_id) % 15) + 1
+                else:
+                    # Fallback for any other type
+                    performance = 5
         
         # Determine performance color
         if performance < 3:
