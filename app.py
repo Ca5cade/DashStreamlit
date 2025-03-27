@@ -93,12 +93,15 @@ def load_data():
                 # Standardize column names for consistency based on the actual CSV columns
                 column_mapping = {
                     'IDChaineMontage': 'Chaine',
+                    'IDchainemontage': 'Chaine',  # Case sensitive match
                     'IDChaineMontage1': 'Chaine',
                     'IDChaineMontage2': 'Chaine',
                     'IDOperation': 'Operation',
+                    'IDoperation': 'Operation',  # Case sensitive match
                     'IDOperation1': 'Operation',
                     'Operation': 'OperationName',
                     'IDControleur': 'Controleur',
+                    'IDcontroleur': 'Controleur',  # Case sensitive match as mentioned by user
                     'Qtte': 'Quantite',
                     'Quantite': 'Quantite',
                     'Quantite2': 'Quantite2',
