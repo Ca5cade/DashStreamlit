@@ -260,8 +260,9 @@ def login_page():
         st.markdown("""
         <p style="text-align: center; margin-top: 10px;">
             <span>Demo credentials: </span>
-            <span style="color: gray;">admin / admin</span> or 
-            <span style="color: gray;">tact / tact</span>
+            <span style="color: gray;">admin / admin</span>, 
+            <span style="color: gray;">tact / tact</span>, or 
+            <span style="color: gray;">oper / oper</span>
         </p>
         """, unsafe_allow_html=True)
         
@@ -271,12 +272,21 @@ def login_page():
                 st.session_state.username = username
                 st.session_state.current_page = "dashboard"
                 st.session_state.dashboard_type = "strategic"
+                st.session_state.user_role = "admin"
                 st.rerun()
             elif username == "tact" and password == "tact":
                 st.session_state.authenticated = True
                 st.session_state.username = username
                 st.session_state.current_page = "dashboard"
                 st.session_state.dashboard_type = "tactical"
+                st.session_state.user_role = "tactical"
+                st.rerun()
+            elif username == "oper" and password == "oper":
+                st.session_state.authenticated = True
+                st.session_state.username = username
+                st.session_state.current_page = "dashboard"
+                st.session_state.dashboard_type = "operational"
+                st.session_state.user_role = "operational"
                 st.rerun()
             else:
                 st.error("Invalid username or password")
@@ -287,6 +297,8 @@ def create_sidebar():
         # Show different dashboard title based on user type
         if st.session_state.dashboard_type == "tactical":
             st.markdown("## Tactical Dashboard")
+        elif st.session_state.dashboard_type == "operational":
+            st.markdown("## Operational Dashboard")
         else:
             st.markdown("## Strategic Dashboard")
         st.markdown("---")
@@ -332,6 +344,8 @@ def create_header():
         st.title("KnitWear Manufacturing")
         if st.session_state.dashboard_type == "tactical":
             st.markdown("Dashboard Tactique (Niveau chefs services)")
+        elif st.session_state.dashboard_type == "operational":
+            st.markdown("Dashboard Opérationnel (Niveau Floorshop/chaînes de production)")
         else:
             st.markdown("Dashboard Stratégique (Niveau direction générale)")
 
@@ -1229,12 +1243,19 @@ def create_reports_page(data):
 # Import tactical dashboard
 from tactical_dashboard import create_tactical_dashboard
 
+# Import operational dashboard
+from operational_dashboard import create_operational_dashboard
+
 # Dashboard page
 def dashboard_page(data):
     # Check user role for dashboard type
     if st.session_state.dashboard_type == "tactical":
         # Display tactical dashboard
         create_tactical_dashboard(data)
+    elif st.session_state.dashboard_type == "operational":
+        # Display operational dashboard
+        create_header()
+        create_operational_dashboard(data)
     else:
         # Create header
         create_header()

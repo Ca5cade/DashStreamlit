@@ -1,0 +1,40 @@
+Dashboard Opérationnel (Niveau Floorshop/ chaînes de production)										
+										
+Objectifs :										
+	Suivre la performance instantanée du processus qualité produit									
+	Suivre les causes principales qui impacte la performance du processus qualité produit									
+	Avoir des outils d’aide à la décision pour  mettre en place des actions instantanément et à court									
+								Données 		
+	Nom	Description	Unité	Formule	les filtres possibles (états)	Paramétrage à appliquer 	Présentations graphiques	Nécessaires 	Non disponible sur Diva	
+Retouche (Confection)										
+	Nbre de retouches Fin Chaîne (NRFC)	C’est le nombre cumulé de pièces à réparer détectées lors du contrôle fin de chaîne pour guider les chefs chaînes et les monitrices	Pcs	Nbre de pcs non conforme fin chaine	"1.Par période (cumul aujourd’hui : heure début jusqu’à heure actuelle),
+2. N° Chaîne ( A définir),
+3. Type d’affichage (Par quantité, par temps, alterné (chaque 5 mn un type))."	"Couleur selon Intervalle de performance : 
+1.couleur verte( performance satisfaisante), 
+2. couleur jaune (performance qui nécessite de la prudence), 
+3. Couleur rouge (performance qui nécessite de l’intervention))"	"1. Graphique Cadran de retouche Fin chaîne,
+2. Détail par poste (N° du poste, NRFC-TRFC / TepRFC-ThRFC),
+3. Graphique Cadran de retouche Encours chaîne,
+4. Détail par poste (N° du poste, NREC- TREC / / TepREC-ThREC),"	"* Numéro poste,
+* Nom d’ouvrière par poste.
+* Temps de présence par ouvrière (H. Début, H. Fin,pause) (si difficile on prend le temps de gamme)
+* Numéro Chaîne,
+* Horaire travail ch.
+* Nombre de pcs contrôlées Fin chaîne,
+*  OF,
+* Nbre retouche FC par opération et par poste,
+*  Type de défaut par retouche,
+*. Temps de retouche par défaut.
+*  Nbre de pcs contrôlées EC,
+*  Nbre retouche EC par poste,
+*  Type de défaut par retouche,"		
+	Taux de retouches Fin de chaîne (TRFC)	C’est le pourcentage de pièces à réparer par rapport pièces contrôlées	%	Nbre de pcs non conforme fin chaine/ Nbre de pièces contrôlée fin chaine						
+	Temps de retouches Fin Chaîne (TepRFC)	C’est le temps cumulé de réparation des retouches détectées lors du contrôle fin de chaîne pour guider les chefs chaînes et les monitrices	Mn	Somme de temps de réparation de pcs non conforme fin chaîne						
+	Taux horaire de retouches Fin de chaîne (ThRFC)	C’est le pourcentage de temps de réparation des retouches fin de chaîne par rapport temps de présence	%	TepRFC/somme de temps de présence des ouvrières de la chaîne						
+	Nbre de retouches Encours Chaîne (NREC)	C’est le nombre de pièces non conformes détectées lors du contrôle encours pour guider les chefs chaînes et les monitrices	pcs	Nbre de pcs non conforme encours						
+	Taux de retouches Encours chaîne (TREC)	C’est le pourcentage de pièces non conformes détectées lors du contrôle encours par rapport aux pièces contrôlées.	%	Nbre de pcs non conforme encours/ Nbre de pièces contrôlée encours						
+	Temps de retouches Encours Chaîne (TepREC)	C’est le temps cumulé de réparation des retouches détectées lors du contrôle encours de chaîne pour guider les chefs chaînes et les monitrices	Mn	Somme de temps de réparation de pcs non conforme Encours chaîne						
+	Taux horaire de retouches Encours de chaîne (ThREC)	C’est le pourcentage de temps de réparation des retouches encours de chaîne par rapport temps de présence	%	TepREC/somme de temps de présence des ouvrières de la chaîne						
+										
+	
+																		
