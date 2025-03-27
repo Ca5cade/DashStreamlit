@@ -1,0 +1,190 @@
+/* Main styles for Tactical Dashboard */
+.tactical-dashboard {
+    background-color: #1e3a8a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.tactical-dashboard h1 {
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.tactical-dashboard h3 {
+    color: white;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 5px;
+}
+
+/* Section styles */
+.section-header {
+    background-color: #4f46e5;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.section-card {
+    background-color: #1e293b;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chart-title {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Metrics styles */
+.metric-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.metric-card {
+    background-color: #334155;
+    border-radius: 8px;
+    padding: 10px;
+    min-width: 120px;
+    margin: 5px;
+    text-align: center;
+}
+
+.metric-title {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.metric-value {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Gauge chart adjustments */
+.gauge-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Chart adjustments */
+.chart-container {
+    height: 250px;
+    width: 100%;
+}
+
+/* Tabs styling */
+.streamlit-tabs {
+    background-color: #334155;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.streamlit-tab {
+    color: #94a3b8;
+    background-color: #1e293b;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.streamlit-tab.active {
+    color: white;
+    background-color: #4f46e5;
+}
+
+/* Table styles */
+.table-container {
+    margin-top: 15px;
+}
+
+.table-header {
+    background-color: #334155;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.table-row:nth-child(even) {
+    background-color: #1e293b;
+}
+
+.table-row:nth-child(odd) {
+    background-color: #334155;
+}
+
+.table-cell {
+    padding: 8px;
+    color: #94a3b8;
+}
+
+/* Filter styles */
+.filter-section {
+    background-color: #334155;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-title {
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Button styles */
+.tactical-button {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.tactical-button:hover {
+    background-color: #4338ca;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section-card {
+        padding: 10px;
+    }
+    
+    .metric-card {
+        min-width: 100px;
+        margin: 3px;
+    }
+    
+    .metric-title {
+        font-size: 0.8rem;
+    }
+    
+    .metric-value {
+        font-size: 1rem;
+    }
+}

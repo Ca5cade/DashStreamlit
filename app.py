@@ -61,6 +61,10 @@ if 'username' not in st.session_state:
     st.session_state.username = ""
 if 'current_page' not in st.session_state:
     st.session_state.current_page = "login"
+if 'dashboard_type' not in st.session_state:
+    st.session_state.dashboard_type = "strategic"
+if 'user_role' not in st.session_state:
+    st.session_state.user_role = "standard"
 
 # Data loading function
 @st.cache_data(ttl=600)
@@ -256,7 +260,8 @@ def login_page():
         st.markdown("""
         <p style="text-align: center; margin-top: 10px;">
             <span>Demo credentials: </span>
-            <span style="color: gray;">admin / admin</span>
+            <span style="color: gray;">admin / admin</span> or 
+            <span style="color: gray;">tact / tact</span>
         </p>
         """, unsafe_allow_html=True)
         
@@ -265,6 +270,13 @@ def login_page():
                 st.session_state.authenticated = True
                 st.session_state.username = username
                 st.session_state.current_page = "dashboard"
+                st.session_state.dashboard_type = "strategic"
+                st.rerun()
+            elif username == "tact" and password == "tact":
+                st.session_state.authenticated = True
+                st.session_state.username = username
+                st.session_state.current_page = "dashboard"
+                st.session_state.dashboard_type = "tactical"
                 st.rerun()
             else:
                 st.error("Invalid username or password")
@@ -272,7 +284,11 @@ def login_page():
 # Create sidebar
 def create_sidebar():
     with st.sidebar:
-        st.markdown("## Strategic Dashboard")
+        # Show different dashboard title based on user type
+        if st.session_state.dashboard_type == "tactical":
+            st.markdown("## Tactical Dashboard")
+        else:
+            st.markdown("## Strategic Dashboard")
         st.markdown("---")
         
         # Navigation links
@@ -314,7 +330,10 @@ def create_header():
         """, unsafe_allow_html=True)
     with col2:
         st.title("KnitWear Manufacturing")
-        st.markdown("Dashboard Stratégique (Niveau direction générale)")
+        if st.session_state.dashboard_type == "tactical":
+            st.markdown("Dashboard Tactique (Niveau chefs services)")
+        else:
+            st.markdown("Dashboard Stratégique (Niveau direction générale)")
 
 # Create filters
 def create_filters(data):
@@ -1207,26 +1226,34 @@ def create_reports_page(data):
             st.info("PDF export would be implemented here. For now, you can use browser print to save as PDF.")
             # In a real implementation, would use a library like ReportLab to create PDFs
 
+# Import tactical dashboard
+from tactical_dashboard import create_tactical_dashboard
+
 # Dashboard page
 def dashboard_page(data):
-    # Create header
-    create_header()
-    
-    # Create filters
-    filters = create_filters(data)
-    
-    # Apply filters
-    filtered_data = apply_all_filters(data, filters)
-    
-    # Dashboard title and description
-    st.markdown("## Dashboard Vue d'ensemble")
-    st.markdown("Tableau de bord montrant les KPIs et indicateurs clés de performance qualité")
-    
-    # Create metrics
-    metrics_values = create_metrics(filtered_data)
-    
-    # Create dashboard charts
-    create_dashboard_charts(filtered_data, metrics_values)
+    # Check user role for dashboard type
+    if st.session_state.dashboard_type == "tactical":
+        # Display tactical dashboard
+        create_tactical_dashboard(data)
+    else:
+        # Create header
+        create_header()
+        
+        # Create filters
+        filters = create_filters(data)
+        
+        # Apply filters
+        filtered_data = apply_all_filters(data, filters)
+        
+        # Dashboard title and description
+        st.markdown("## Dashboard Vue d'ensemble")
+        st.markdown("Tableau de bord montrant les KPIs et indicateurs clés de performance qualité")
+        
+        # Create metrics
+        metrics_values = create_metrics(filtered_data)
+        
+        # Create dashboard charts
+        create_dashboard_charts(filtered_data, metrics_values)
 
 # Main app
 def main():

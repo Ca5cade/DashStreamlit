@@ -1,0 +1,31 @@
+Dashboard Tactique (Niveau chefs services)																										
+Objectifs :																										
+	Suivre la performance du processus qualité produit																									
+	Suivre les causes principales qui impacte la performance du processus qualité produit																									
+	Avoir des outils d’aide à la décision pour  mettre en place des actions à court et moyen terme																									
+																										
+								Données nécessaire																		
+	Nom	Description	Unité	Formule	les filtres possibles (états)	Filtres à appliquer	Présentations graphiques	A importer de Diva	A ajouter																	
+Retouche																										
+	Nbre de retouche	C’est le nombre de pièces à réparer pour évaluer quantitativement la performance qualité	Nbre	Nbre de pcs non conforme contrôle fin chaine	Par destinataire (KWM, client, commande, prestataire) par source (prestataire, chaîne, fille, défaut), Par période	Période, KWM	"1. Graphique Cadran Coût retouche cumulé (en chiffre et en %)  
+2. Camembert répartition coût retouche en Top 3 défauts. 
+3. Répartition coût retouche selon Top 3 prestataires.  
+4. courbe tendance de l’historique Retouche,  et sa répartition en défaut (par mois).
+5. courbe tendance de l’historique Retouche,  et sa répartition en prestataire (par mois)."																			
+	Taux de retouche	C’est le pourcentage de pièces à réparer par rapport pièces contrôlées pour normaliser la performance qualité	%	Nbre de pcs non conforme fin chaine/ Nbre de pièces contrôlée fin chaine																						
+	Temps de retouche	C’est le temps de réparation des pièces non conformes pour évaluer le temps causé par les retouches	Mn	La somme de (Nbre de pièces non conforme * temps de réparation correspondant)																						
+	Taux temps de retouche	C’est le pourcentage de temps  de réparation par rapport aux temps produits	%	Temps de réparation /Somme (nombre de pièces produites * temps de gamme unitaire)																						
+	Coût de retouche	C’est le coût de réparation des pièces non conformes pour évaluer l’impact économique des retouches	Tnd	La somme de (Nbre de pièces non conforme * temps de réparation correspondant* coût mn)																						
+	% coût de retouche	C’est le pourcentage du coût  de réparation par rapport au chiffre d’affaire des pièces contrôlés	%	coût de réparation/ (somme (pièce contrôlée * prix de vente)																						
+Rebut (export)																										
+	Rebut	C’est le nombre de pièces coupées non exportées pour les commandes exportées. Il englobe : le nombre de pièces déclassées + pcs perdues	pcs	nbre piéces déclassées + perdues (qté coupée – (qté exportée + restante))	Par destinataire (KWM, client, commande, prestataire) par source (prestataire, chaîne, fille, défaut), Par période	Période, KWM	"1. Graphique Cadran Coût retouche cumulé (en chiffre et en %)   2. Camembert répartition coût retouche en Top 3 défauts.  
+3. Répartition coût retouche en Top 3 prestataires.   
+4. courbe tendance de l’historique Retouche,  et sa répartition en défaut (par mois). 
+5. courbe tendance de l’historique Retouche,  et sa répartition en prestataire (par mois)."																			
+	Taux rebut	Pourcentage par rapport aux pièces coupées	%	Rebut/Nbre de pièces coupées																						
+	Coût rebut	coût des pièces déclassées + perdues	Tnd	somme (rebut * prix unitaire)																						
+	Taux coût de rebut	Pourcentage coût de rebut par rapport au chiffre d’affaire des commandes exportées	%	coût rebut/ somme (pièces exportées * prix unitaire)																						
+Pénalité																										
+	Pénalité qualité	Montant pénalités validées	Tnd	somme des pénalités validées	Par destinataire (KWM, client, commande, prestataire) par source (prestataire, chaîne, défaut), Par période	Période, KWM	"1. Graphique Cadran Coût retouche cumulé (en chiffre et en %)   2. Camembert répartition coût retouche en 3 défauts majeurs,   
+3. Répartition coût retouche selon les 3 prestataires majeurs."																			
+	Taux Pénalité qualité	% pénalités par rapport chiffre d’affaire des commandes exportées	%	montant/(nbre pcs exportées * prix unitaire)			
