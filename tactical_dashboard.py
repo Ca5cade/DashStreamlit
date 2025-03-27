@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from utils import load_data, apply_all_filters, create_gauge_chart
+from utils import apply_all_filters, create_gauge_chart
 
 # Create tactical dashboard header
 def create_tactical_header():
