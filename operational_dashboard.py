@@ -67,11 +67,18 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
     # but for demonstration we'll create some simulated data
     elements = []
     
+    # Determine the operation column name based on what's available
+    operation_column = None
+    for col_name in ['IDOperation', 'Operation', 'idoperation', 'operation']:
+        if col_name in filtered_data.columns:
+            operation_column = col_name
+            break
+    
     # Get unique operation IDs from data if available
-    if 'IDOperation' in filtered_data.columns:
-        operations = filtered_data['IDOperation'].unique().tolist()
+    if operation_column:
+        operations = filtered_data[operation_column].unique().tolist()
     else:
-        # Sample operations for demonstration
+        # Sample operations for demonstration if no valid column found
         operations = list(range(30, 55)) + list(range(80, 87)) + list(range(112, 119))
     
     # For each operation, create an element
@@ -79,24 +86,45 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
         # Determine the status/performance color
         # In real implementation, calculate this based on actual metrics
         
+        # Initialize retouche count
+        retouche_count = 0
+        
         if mode == "fin_chaine":
-            # Get retouche count for this operation
-            retouche_count = filtered_data[
-                (filtered_data['IDOperation'] == op_id) & 
-                (filtered_data['TypeControle'] == 'Fin_Chaine')
-            ].shape[0]
+            if operation_column and 'TypeControle' in filtered_data.columns:
+                # Get retouche count for this operation
+                retouche_count = filtered_data[
+                    (filtered_data[operation_column] == op_id) & 
+                    (filtered_data['TypeControle'] == 'Fin_Chaine')
+                ].shape[0]
+            elif operation_column:
+                # If TypeControle not available, just count by operation
+                retouche_count = filtered_data[filtered_data[operation_column] == op_id].shape[0]
             
-            # Simulate performance level (would be based on actual data)
-            performance = retouche_count / max(1, filtered_data['Quantite'].sum()) * 100
+            # Calculate random performance for demonstration
+            if 'Quantite' in filtered_data.columns:
+                total_qty = filtered_data['Quantite'].sum()
+                performance = retouche_count / max(1, total_qty) * 100
+            else:
+                # Generate random performance between 1-15% for demo
+                performance = (op_id % 15) + 1
         else:
             # For encours_chaine
-            retouche_count = filtered_data[
-                (filtered_data['IDOperation'] == op_id) & 
-                (filtered_data['TypeControle'] == 'Encours_Chaine')
-            ].shape[0]
+            if operation_column and 'TypeControle' in filtered_data.columns:
+                retouche_count = filtered_data[
+                    (filtered_data[operation_column] == op_id) & 
+                    (filtered_data['TypeControle'] == 'Encours_Chaine')
+                ].shape[0]
+            elif operation_column:
+                # If TypeControle not available, just count by operation
+                retouche_count = filtered_data[filtered_data[operation_column] == op_id].shape[0]
             
-            # Simulate performance level (would be based on actual data)
-            performance = retouche_count / max(1, filtered_data['Quantite'].sum()) * 100
+            # Calculate random performance for demonstration
+            if 'Quantite' in filtered_data.columns:
+                total_qty = filtered_data['Quantite'].sum()
+                performance = retouche_count / max(1, total_qty) * 100
+            else:
+                # Generate random performance between 1-15% for demo
+                performance = (op_id % 15) + 1
         
         # Determine performance color
         if performance < 3:
@@ -136,8 +164,15 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
 
 def create_orders_detail_grid(filtered_data):
     """Create the orders detail grid for the Rebut dashboard"""
+    # Check for available order/fabrication columns
+    order_column = None
+    for col_name in ['IDOFabrication', 'IDOfabrication', 'OFabrication', 'OF', 'id_fabrication']:
+        if col_name in filtered_data.columns:
+            order_column = col_name
+            break
+    
     # Create a table for order details
-    orders = filtered_data['IDOFabrication'].unique() if 'IDOFabrication' in filtered_data.columns else ['PO 1']
+    orders = filtered_data[order_column].unique().tolist() if order_column else ['PO 1', 'PO 2', 'PO 3', 'PO 4', 'PO 5', 'PO 6', 'PO 7', 'PO 8']
     
     # Create header
     st.markdown("""
@@ -153,7 +188,9 @@ def create_orders_detail_grid(filtered_data):
     # Create rows for each order
     for order in orders[:8]:  # Limit to 8 orders for display
         # Calculate metrics for this order
-        order_data = filtered_data[filtered_data['IDOFabrication'] == order] if 'IDOFabrication' in filtered_data.columns else filtered_data
+        order_data = filtered_data
+        if order_column and order_column in filtered_data.columns:
+            order_data = filtered_data[filtered_data[order_column] == order]
         
         # Get total quantity
         total_qty = order_data['Quantite'].sum() if 'Quantite' in order_data.columns else 1000
