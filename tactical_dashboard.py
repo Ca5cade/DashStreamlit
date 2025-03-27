@@ -276,7 +276,7 @@ def create_tactical_dashboard(data):
     # Top defects for Retouche
     with row1_cols[0]:
         defects_pie = create_top_defects_pie(filtered_data, 'Retouche', n=3, title="Répartition Top 3 défauts")
-        st.plotly_chart(defects_pie, use_container_width=True)
+        st.plotly_chart(defects_pie, use_container_width=True, key="retouche_defects_pie")
     
     # Cost gauge for Retouche
     with row1_cols[1]:
@@ -293,12 +293,12 @@ def create_tactical_dashboard(data):
             max_val=max_acceptable_cost,
             title="Coût Retouche Cumulé"
         )
-        st.plotly_chart(retouche_gauge, use_container_width=True)
+        st.plotly_chart(retouche_gauge, use_container_width=True, key="retouche_gauge_chart")
     
     # Top providers for Retouche
     with row1_cols[2]:
         providers_pie = create_top_providers_pie(filtered_data, 'Retouche', n=3, title="Répartition Top 3 prestataires")
-        st.plotly_chart(providers_pie, use_container_width=True)
+        st.plotly_chart(providers_pie, use_container_width=True, key="retouche_providers_pie")
     
     # Retouche metrics
     with row1_cols[3]:
