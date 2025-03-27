@@ -270,8 +270,14 @@ def create_tactical_dashboard(data):
     st.markdown("## Tableau de bord tactique")
     
     # ---------------- RETOUCHE SECTION ----------------
-    st.markdown("### Retouche")
-    row1_cols = st.columns([1, 1, 1, 1])
+    st.markdown("""
+    <div style="background-color:#4f46e5; padding:10px; border-radius:10px; margin-bottom:20px">
+        <h3 style="color:white; text-align:center; margin:0">RETOUCHE</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # First row of Retouche charts
+    row1_cols = st.columns(2)
     
     # Top defects for Retouche
     with row1_cols[0]:
@@ -295,13 +301,16 @@ def create_tactical_dashboard(data):
         )
         st.plotly_chart(retouche_gauge, use_container_width=True, key="retouche_gauge_chart")
     
+    # Second row of Retouche charts
+    row2_cols = st.columns(2)
+    
     # Top providers for Retouche
-    with row1_cols[2]:
+    with row2_cols[0]:
         providers_pie = create_top_providers_pie(filtered_data, 'Retouche', n=3, title="Répartition Top 3 prestataires")
         st.plotly_chart(providers_pie, use_container_width=True, key="retouche_providers_pie")
     
     # Retouche metrics
-    with row1_cols[3]:
+    with row2_cols[1]:
         st.markdown("#### Métriques Retouche")
         col1, col2 = st.columns(2)
         col1.metric("Nombre de retouche", f"{metrics['retouche_count']:,.0f} pcs")
@@ -311,35 +320,23 @@ def create_tactical_dashboard(data):
         col1.metric("Coût de retouche", f"{metrics['retouche_cost']:,.0f} TND")
         col2.metric("% coût de retouche", f"{metrics['retouche_cost_rate']:.2f}%")
     
-    # Line charts for Retouche
-    row2_cols = st.columns(2)
-    
-    with row2_cols[0]:
-        defect_trend = create_trend_chart(
-            filtered_data, 
-            'Retouche', 
-            'Retouche_Defaut', 
-            title="Historique Top 3 Défauts"
-        )
-        st.plotly_chart(defect_trend, use_container_width=True)
-    
-    with row2_cols[1]:
-        provider_trend = create_trend_chart(
-            filtered_data, 
-            'Retouche', 
-            'Retouche_Prestataire', 
-            title="Historique Top 3 prestataires"
-        )
-        st.plotly_chart(provider_trend, use_container_width=True)
+    # Add spacer between sections
+    st.markdown("<br>", unsafe_allow_html=True)
     
     # ---------------- REBUT SECTION ----------------
-    st.markdown("### Rebut")
-    row3_cols = st.columns([1, 1, 1, 1])
+    st.markdown("""
+    <div style="background-color:#4f46e5; padding:10px; border-radius:10px; margin-bottom:20px; margin-top:20px">
+        <h3 style="color:white; text-align:center; margin:0">REBUT</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # First row of Rebut charts
+    row3_cols = st.columns(2)
     
     # Top defects for Rebut
     with row3_cols[0]:
         defects_pie = create_top_defects_pie(filtered_data, 'Rebut', n=3, title="Répartition Top 3 défauts")
-        st.plotly_chart(defects_pie, use_container_width=True)
+        st.plotly_chart(defects_pie, use_container_width=True, key="rebut_defects_pie")
     
     # Cost gauge for Rebut
     with row3_cols[1]:
@@ -356,46 +353,37 @@ def create_tactical_dashboard(data):
             max_val=max_acceptable_cost,
             title="Coût Rebut Cumulé"
         )
-        st.plotly_chart(rebut_gauge, use_container_width=True)
+        st.plotly_chart(rebut_gauge, use_container_width=True, key="rebut_gauge_chart")
+    
+    # Second row of Rebut charts
+    row4_cols = st.columns(2)
     
     # Top providers for Rebut
-    with row3_cols[2]:
+    with row4_cols[0]:
         providers_pie = create_top_providers_pie(filtered_data, 'Rebut', n=3, title="Répartition Top 3 prestataires")
-        st.plotly_chart(providers_pie, use_container_width=True)
+        st.plotly_chart(providers_pie, use_container_width=True, key="rebut_providers_pie")
     
     # Rebut metrics
-    with row3_cols[3]:
+    with row4_cols[1]:
         st.markdown("#### Métriques Rebut")
         col1, col2 = st.columns(2)
         col1.metric("Rebut", f"{metrics['rebut_count']:,.0f} pcs")
         col2.metric("Taux rebut", f"{metrics['rebut_rate']:.2f}%")
         col1.metric("Coût rebut", f"{metrics['rebut_cost']:,.0f} TND")
         col2.metric("Taux coût de rebut", f"{metrics['rebut_cost_rate']:.2f}%")
-    
-    # Line charts for Rebut
-    row4_cols = st.columns(2)
-    
-    with row4_cols[0]:
-        defect_trend = create_trend_chart(
-            filtered_data, 
-            'Rebut', 
-            'Rebut_Defaut', 
-            title="Historique Top 3 Défauts"
-        )
-        st.plotly_chart(defect_trend, use_container_width=True)
-    
-    with row4_cols[1]:
-        provider_trend = create_trend_chart(
-            filtered_data, 
-            'Rebut', 
-            'Rebut_Prestataire', 
-            title="Historique Top 3 prestataires"
-        )
-        st.plotly_chart(provider_trend, use_container_width=True)
+
+    # Add spacer between sections
+    st.markdown("<br>", unsafe_allow_html=True)
     
     # ---------------- PENALITE SECTION ----------------
-    st.markdown("### Pénalité")
-    row5_cols = st.columns([1, 1, 1, 1])
+    st.markdown("""
+    <div style="background-color:#4f46e5; padding:10px; border-radius:10px; margin-bottom:20px; margin-top:20px">
+        <h3 style="color:white; text-align:center; margin:0">PÉNALITÉ</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # First row of Penalty charts
+    row5_cols = st.columns(2)
     
     # Penalty metrics
     with row5_cols[0]:
@@ -419,18 +407,70 @@ def create_tactical_dashboard(data):
             max_val=max_acceptable_cost,
             title="Pénalités Cumulées"
         )
-        st.plotly_chart(penalty_gauge, use_container_width=True)
+        st.plotly_chart(penalty_gauge, use_container_width=True, key="penalite_gauge_chart")
+    
+    # Second row of Penalty charts
+    row6_cols = st.columns(2)
     
     # Defects and distribution for Penalty
-    with row5_cols[2]:
+    with row6_cols[0]:
         defects_pie = create_top_defects_pie(filtered_data, 'Penalite', n=3, title="Répartition Pénalités")
-        st.plotly_chart(defects_pie, use_container_width=True)
+        st.plotly_chart(defects_pie, use_container_width=True, key="penalite_defects_pie")
     
-    with row5_cols[3]:
+    with row6_cols[1]:
         penalty_trend = create_trend_chart(
             filtered_data, 
             'Penalite', 
             None, 
             title="Historique Pénalités"
         )
-        st.plotly_chart(penalty_trend, use_container_width=True)
+        st.plotly_chart(penalty_trend, use_container_width=True, key="penalite_trend_chart")
+        
+    # Line charts for historical data (placed at the bottom as additional information)
+    st.markdown("""
+    <div style="background-color:#4f46e5; padding:10px; border-radius:10px; margin-bottom:20px; margin-top:20px">
+        <h3 style="color:white; text-align:center; margin:0">TENDANCES HISTORIQUES</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    hist_cols = st.columns(2)
+    
+    # Historical trends for Retouche
+    with hist_cols[0]:
+        defect_trend = create_trend_chart(
+            filtered_data, 
+            'Retouche', 
+            'Retouche_Defaut', 
+            title="Historique Retouche par Défaut"
+        )
+        st.plotly_chart(defect_trend, use_container_width=True, key="retouche_defect_trend")
+    
+    with hist_cols[1]:
+        provider_trend = create_trend_chart(
+            filtered_data, 
+            'Retouche', 
+            'Retouche_Prestataire', 
+            title="Historique Retouche par Prestataire"
+        )
+        st.plotly_chart(provider_trend, use_container_width=True, key="retouche_provider_trend")
+    
+    # Historical trends for Rebut
+    hist_cols2 = st.columns(2)
+    
+    with hist_cols2[0]:
+        defect_trend = create_trend_chart(
+            filtered_data, 
+            'Rebut', 
+            'Rebut_Defaut', 
+            title="Historique Rebut par Défaut"
+        )
+        st.plotly_chart(defect_trend, use_container_width=True, key="rebut_defect_trend")
+    
+    with hist_cols2[1]:
+        provider_trend = create_trend_chart(
+            filtered_data, 
+            'Rebut', 
+            'Rebut_Prestataire', 
+            title="Historique Rebut par Prestataire"
+        )
+        st.plotly_chart(provider_trend, use_container_width=True, key="rebut_provider_trend")
