@@ -80,30 +80,37 @@ def load_data():
                     
                 # Ensure data types are correct
                 # Convert date columns to datetime
-                if 'date' in data.columns:
-                    data['DATE'] = pd.to_datetime(data['date'], errors='coerce')
-                elif 'DATE' in data.columns:
+                if 'DATE' in data.columns:
                     data['DATE'] = pd.to_datetime(data['DATE'], errors='coerce')
+                elif 'date' in data.columns:
+                    data['DATE'] = pd.to_datetime(data['date'], errors='coerce')
                 
                 # Extract month and year for easy filtering
                 if 'DATE' in data.columns:
                     data['Month'] = data['DATE'].dt.month
                     data['Year'] = data['DATE'].dt.year
                     
-                # Standardize column names for consistency
+                # Standardize column names for consistency based on the actual CSV columns
                 column_mapping = {
-                    'idchainemontage': 'Chaine',
-                    'idoperation': 'Operation',
-                    'idcontroleur': 'Controleur',
-                    'idchainemontage1': 'Chaine',
-                    'idoperation1': 'Operation',
-                    'Contrôleur (se)': 'Controleur',  # Alias
-                    'Chaîne': 'Chaine',  # Alias
+                    'IDChaineMontage': 'Chaine',
+                    'IDChaineMontage1': 'Chaine',
+                    'IDChaineMontage2': 'Chaine',
+                    'IDOperation': 'Operation',
+                    'IDOperation1': 'Operation',
+                    'Operation': 'OperationName',
+                    'IDControleur': 'Controleur',
                     'Qtte': 'Quantite',
-                    'Qtte OF': 'Quantite',  # Alias
-                    'qtte': 'Quantite',
-                    'qtte2': 'Quantite2',
-                    'nbrreclamations': 'NbrReclamations'
+                    'Quantite': 'Quantite',
+                    'Quantite2': 'Quantite2',
+                    'QtteLct': 'QtteLct',
+                    'QtteLct2': 'QtteLct2',
+                    'QtteSondee': 'QtteSondee',
+                    'NbrReclamations': 'NbrReclamations',
+                    'DATE': 'DATE',
+                    'DeuxiemeChoix': 'DeuxiemeChoix',
+                    'Note': 'Note',
+                    'ValeurOF': 'ValeurOF',
+                    'Libelle': 'Libelle'
                 }
                 
                 # Apply column mapping where columns exist
