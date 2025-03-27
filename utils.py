@@ -76,13 +76,23 @@ def apply_all_filters(data, filters):
     
     # Apply categorical filters
     if filters.get("chains"):
-        filtered_data = apply_categorical_filter(filtered_data, 'Chaine', filters.get("chains"))
+        if 'idchainemontage' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'idchainemontage', filters.get("chains"))
+        elif 'IDchainemontage' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'IDchainemontage', filters.get("chains"))
+        elif 'Chaine' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'Chaine', filters.get("chains"))
     
     if filters.get("operations"):
         filtered_data = apply_categorical_filter(filtered_data, 'Operation', filters.get("operations"))
     
     if filters.get("controllers"):
-        filtered_data = apply_categorical_filter(filtered_data, 'Controleur', filters.get("controllers"))
+        if 'IDcontroleur' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'IDcontroleur', filters.get("controllers"))
+        elif 'IDControleur' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'IDControleur', filters.get("controllers"))
+        elif 'Controleur' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'Controleur', filters.get("controllers"))
     
     # Apply numerical filters
     if filters.get("cnq_min") is not None or filters.get("cnq_max") is not None:

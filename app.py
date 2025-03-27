@@ -352,7 +352,13 @@ def create_filters(data):
         with col2:
             # Chain filter
             st.subheader("Chaîne")
-            if 'Chaine' in data.columns:
+            if 'idchainemontage' in data.columns:
+                chain_options = sorted(data['idchainemontage'].astype(str).unique().tolist())
+                selected_chains = st.multiselect("Select chains", options=chain_options)
+            elif 'IDchainemontage' in data.columns:
+                chain_options = sorted(data['IDchainemontage'].astype(str).unique().tolist())
+                selected_chains = st.multiselect("Select chains", options=chain_options)
+            elif 'Chaine' in data.columns:
                 chain_options = sorted(data['Chaine'].astype(str).unique().tolist())
                 selected_chains = st.multiselect("Select chains", options=chain_options)
             else:
@@ -375,7 +381,13 @@ def create_filters(data):
         with col4:
             # Controller filter
             st.subheader("Contrôleur")
-            if 'Controleur' in data.columns:
+            if 'IDcontroleur' in data.columns:
+                controller_options = sorted(data['IDcontroleur'].astype(str).unique().tolist())
+                selected_controllers = st.multiselect("Select controllers", options=controller_options)
+            elif 'IDControleur' in data.columns:
+                controller_options = sorted(data['IDControleur'].astype(str).unique().tolist())
+                selected_controllers = st.multiselect("Select controllers", options=controller_options)
+            elif 'Controleur' in data.columns:
                 controller_options = sorted(data['Controleur'].astype(str).unique().tolist())
                 selected_controllers = st.multiselect("Select controllers", options=controller_options)
             else:
@@ -672,9 +684,17 @@ def create_dashboard_charts(filtered_data, metrics):
     
     # Chain tab
     with category_tabs[0]:
-        if 'Chaine' in filtered_data.columns and not filtered_data.empty:
+        chain_col = None
+        if 'idchainemontage' in filtered_data.columns and not filtered_data.empty:
+            chain_col = 'idchainemontage'
+        elif 'IDchainemontage' in filtered_data.columns and not filtered_data.empty:
+            chain_col = 'IDchainemontage'
+        elif 'Chaine' in filtered_data.columns and not filtered_data.empty:
+            chain_col = 'Chaine'
+            
+        if chain_col:
             # Group by Chain and calculate metrics
-            top_data = filtered_data.groupby('Chaine').agg({
+            top_data = filtered_data.groupby(chain_col).agg({
                 'CNQ': 'sum',
                 'Retouche': 'sum',
                 'Rebut': 'sum',
@@ -687,7 +707,7 @@ def create_dashboard_charts(filtered_data, metrics):
             # Create horizontal bar chart
             bar_fig = px.bar(
                 top_data,
-                y='Chaine',
+                y=chain_col,
                 x=['Retouche', 'Rebut', 'Penalite'],
                 title="Top 10 Chaînes par CNQ",
                 template="plotly_dark",
@@ -746,9 +766,17 @@ def create_dashboard_charts(filtered_data, metrics):
     
     # Controller tab
     with category_tabs[2]:
-        if 'Controleur' in filtered_data.columns and not filtered_data.empty:
+        controller_col = None
+        if 'IDcontroleur' in filtered_data.columns and not filtered_data.empty:
+            controller_col = 'IDcontroleur'
+        elif 'IDControleur' in filtered_data.columns and not filtered_data.empty:
+            controller_col = 'IDControleur'
+        elif 'Controleur' in filtered_data.columns and not filtered_data.empty:
+            controller_col = 'Controleur'
+            
+        if controller_col:
             # Group by Controller and calculate metrics
-            top_data = filtered_data.groupby('Controleur').agg({
+            top_data = filtered_data.groupby(controller_col).agg({
                 'CNQ': 'sum',
                 'Retouche': 'sum',
                 'Rebut': 'sum',
@@ -761,7 +789,7 @@ def create_dashboard_charts(filtered_data, metrics):
             # Create horizontal bar chart
             bar_fig = px.bar(
                 top_data,
-                y='Controleur',
+                y=controller_col,
                 x=['Retouche', 'Rebut', 'Penalite'],
                 title="Top 10 Contrôleurs par CNQ",
                 template="plotly_dark",
@@ -822,8 +850,12 @@ def create_analytics_page(data):
     with col3:
         # Group by options
         group_by_options = [
+            {'label': 'Chaîne', 'value': 'idchainemontage'},
+            {'label': 'Chaîne', 'value': 'IDchainemontage'},
             {'label': 'Chaîne', 'value': 'Chaine'},
             {'label': 'Opération', 'value': 'Operation'},
+            {'label': 'Contrôleur', 'value': 'IDcontroleur'},
+            {'label': 'Contrôleur', 'value': 'IDControleur'},
             {'label': 'Contrôleur', 'value': 'Controleur'},
             {'label': 'Jour', 'value': 'DATE'},
             {'label': 'Mois', 'value': 'Month'},
@@ -835,7 +867,7 @@ def create_analytics_page(data):
             "Regrouper par",
             options=[option['value'] for option in group_by_options],
             format_func=lambda x: next((option['label'] for option in group_by_options if option['value'] == x), x),
-            default=['Chaine'] if 'Chaine' in data.columns else []
+            default=[option['value'] for option in group_by_options if option['label'] == 'Chaîne'][:1] if any(option['label'] == 'Chaîne' for option in group_by_options) else []
         )
     
     with col4:
