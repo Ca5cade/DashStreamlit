@@ -63,6 +63,8 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
     Returns:
         Streamlit elements grid with details
     """
+    # Import html library for escaping values to prevent display issues
+    import html
     # Enhanced CSS for data visualization with darker, more readable colors
     st.markdown("""
     <style>
@@ -240,10 +242,11 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
             else:
                 color_class = "red-item"
             
-            # Add grid item
+            # Add grid item - escape any HTML characters in op_id
+            safe_op_id = html.escape(str(op_id)) if op_id else ""
             grid_html += f"""
             <div class="grid-item {color_class}">
-                <div class="grid-item-id">{op_id}</div>
+                <div class="grid-item-id">{safe_op_id}</div>
                 <div class="grid-item-perf">{percentage}%</div>
                 <div class="grid-item-count">{count} pcs</div>
             </div>
@@ -293,9 +296,11 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
                 else:
                     badge_class = "badge-green"
                 
+                # Escape operation name to prevent HTML display issues
+                safe_operation = html.escape(str(row['operation'])) if row['operation'] else ""
                 table_rows += f"""
                 <tr>
-                    <td>{row['operation']}</td>
+                    <td>{safe_operation}</td>
                     <td>{int(row['count'])}</td>
                     <td>
                         <div class="progress-bar">
@@ -338,6 +343,8 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
 
 def create_orders_detail_grid(filtered_data):
     """Create the orders detail grid for the Rebut dashboard with modern design"""
+    # Import html library for escaping values to prevent display issues
+    import html
     # Enhanced CSS for orders table with darker, more readable colors
     st.markdown("""
     <style>
@@ -506,10 +513,13 @@ def create_orders_detail_grid(filtered_data):
             qty_danger = int(total_qty * danger_pct / 100)
             qty_other = total_qty - qty_success - qty_warning - qty_danger
             
+            # Escape order value to prevent HTML display issues
+            safe_order = html.escape(str(order)) if order else ""
+            
             # Add to table
             table_html += f"""
             <tr>
-                <td><strong>{order}</strong></td>
+                <td><strong>{safe_order}</strong></td>
                 <td>{int(total_qty)} pcs</td>
                 <td>
                     <div class="of-progress-container">
