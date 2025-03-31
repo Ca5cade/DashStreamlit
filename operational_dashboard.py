@@ -63,13 +63,13 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
     Returns:
         Streamlit elements grid with details
     """
-    # Enhanced CSS for data visualization
+    # Enhanced CSS for data visualization with darker, more readable colors
     st.markdown("""
     <style>
     .table-wrapper {
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
     }
     .custom-table {
@@ -78,37 +78,37 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
         font-size: 14px;
     }
     .custom-table thead th {
-        background-color: #1e3a8a;
+        background-color: #0d47a1;
         color: white;
         padding: 12px 15px;
         text-align: left;
         font-weight: bold;
     }
     .custom-table tbody tr {
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid #bbdefb;
     }
     .custom-table tbody tr:nth-child(even) {
-        background-color: #f8fafc;
+        background-color: #e3f2fd;
     }
     .custom-table tbody tr:hover {
-        background-color: #e2e8f0;
+        background-color: #bbdefb;
     }
     .custom-table tbody td {
         padding: 10px 15px;
-        color: #334155;
+        color: #102a43;
     }
     .custom-table tbody tr:last-child {
         border-bottom: none;
     }
     .progress-bar {
         height: 8px;
-        background-color: #e2e8f0;
+        background-color: #e3f2fd;
         border-radius: 4px;
         overflow: hidden;
     }
     .progress-value {
         height: 100%;
-        background-color: #3b82f6;
+        background-color: #2196f3;
         border-radius: 4px;
     }
     .badge {
@@ -120,20 +120,20 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
         color: white;
     }
     .badge-red {
-        background-color: #ef4444;
+        background-color: #d32f2f;
     }
     .badge-yellow {
-        background-color: #f59e0b;
+        background-color: #f57c00;
     }
     .badge-green {
-        background-color: #10b981;
+        background-color: #388e3c;
     }
     .badge-blue {
-        background-color: #3b82f6;
+        background-color: #1976d2;
     }
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
         margin-bottom: 10px;
     }
@@ -141,13 +141,13 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
         border-radius: 8px;
         padding: 10px;
         text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s;
         background-color: white;
     }
     .grid-item:hover {
         transform: translateY(-3px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
     .grid-item-id {
         font-weight: bold;
@@ -160,23 +160,23 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
     }
     .grid-item-count {
         font-size: 12px;
-        color: #64748b;
+        color: #546e7a;
     }
     .green-item {
-        border-left: 4px solid #10b981;
+        border-left: 4px solid #388e3c;
     }
     .yellow-item {
-        border-left: 4px solid #f59e0b;
+        border-left: 4px solid #f57c00;
     }
     .red-item {
-        border-left: 4px solid #ef4444;
+        border-left: 4px solid #d32f2f;
     }
     .empty-state {
         text-align: center;
         padding: 30px;
-        background-color: #f8fafc;
+        background-color: #e3f2fd;
         border-radius: 8px;
-        color: #64748b;
+        color: #102a43;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -327,10 +327,10 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
             </div>
             """, unsafe_allow_html=True)
     else:
-        # Show empty state
+        # Show empty state with emoji instead of FontAwesome
         st.markdown("""
         <div class="empty-state">
-            <i class="fas fa-info-circle" style="font-size:24px; color:#3b82f6; margin-bottom:10px;"></i>
+            <div style="font-size:24px; margin-bottom:10px;">ℹ️</div>
             <div style="font-weight:bold; margin-bottom:5px;">Aucune donnée disponible</div>
             <div>Essayez d'ajuster vos filtres pour voir des résultats pour cette catégorie.</div>
         </div>
@@ -338,7 +338,7 @@ def create_element_grid(filtered_data, mode="fin_chaine"):
 
 def create_orders_detail_grid(filtered_data):
     """Create the orders detail grid for the Rebut dashboard with modern design"""
-    # Enhanced CSS for orders table
+    # Enhanced CSS for orders table with darker, more readable colors
     st.markdown("""
     <style>
     .of-table {
@@ -346,11 +346,11 @@ def create_orders_detail_grid(filtered_data):
         border-collapse: collapse;
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         margin-bottom: 15px;
     }
     .of-table th {
-        background-color: #1e3a8a;
+        background-color: #0d47a1;
         color: white;
         padding: 12px;
         text-align: center;
@@ -360,17 +360,17 @@ def create_orders_detail_grid(filtered_data):
     .of-table td {
         padding: 10px 5px;
         text-align: center;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid #bbdefb;
         font-size: 13px;
     }
     .of-table tr:last-child td {
         border-bottom: none;
     }
     .of-table tr:nth-child(even) {
-        background-color: #f8fafc;
+        background-color: #e3f2fd;
     }
     .of-table tr:hover td {
-        background-color: #e2e8f0;
+        background-color: #bbdefb;
     }
     .of-card {
         background-color: white;
@@ -380,17 +380,17 @@ def create_orders_detail_grid(filtered_data):
         flex-direction: column;
         align-items: center;
         margin-bottom: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .of-title {
         font-weight: bold;
         font-size: 14px;
         margin-bottom: 5px;
-        color: #1e3a8a;
+        color: #0d47a1;
     }
     .of-subtitle {
         font-size: 12px;
-        color: #64748b;
+        color: #546e7a;
     }
     .of-category {
         margin-top: 5px;
@@ -400,17 +400,17 @@ def create_orders_detail_grid(filtered_data):
     .of-count {
         margin-top: 3px;
         font-size: 10px;
-        color: #64748b;
+        color: #546e7a;
     }
-    .perc-1 { color: #ef4444; }
-    .perc-10 { color: #f59e0b; }
-    .perc-50 { color: #10b981; }
-    .perc-39 { color: #3b82f6; }
+    .perc-1 { color: #d32f2f; }
+    .perc-10 { color: #f57c00; }
+    .perc-50 { color: #388e3c; }
+    .perc-39 { color: #1976d2; }
     
     /* Progress bar styles */
     .of-progress-container {
         width: 100%;
-        background-color: #e2e8f0;
+        background-color: #e3f2fd;
         height: 8px;
         border-radius: 4px;
         overflow: hidden;
@@ -421,16 +421,16 @@ def create_orders_detail_grid(filtered_data):
         border-radius: 4px;
     }
     .of-progress-red {
-        background-color: #ef4444;
+        background-color: #d32f2f;
     }
     .of-progress-orange {
-        background-color: #f59e0b;
+        background-color: #f57c00;
     }
     .of-progress-green {
-        background-color: #10b981;
+        background-color: #388e3c;
     }
     .of-progress-blue {
-        background-color: #3b82f6;
+        background-color: #1976d2;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -545,12 +545,12 @@ def create_orders_detail_grid(filtered_data):
         </div>
         """, unsafe_allow_html=True)
     else:
-        # Show empty state with better styling
+        # Show empty state with emoji instead of FontAwesome
         st.markdown("""
-        <div style="text-align:center; padding:20px; background-color:#f8fafc; border-radius:8px; margin-bottom:15px;">
-            <i class="fas fa-info-circle" style="font-size:24px; color:#3b82f6; margin-bottom:10px;"></i>
+        <div style="text-align:center; padding:20px; background-color:#e3f2fd; border-radius:8px; margin-bottom:15px;">
+            <div style="font-size:24px; margin-bottom:10px;">ℹ️</div>
             <div style="font-weight:bold; margin-bottom:5px;">Aucun ordre de fabrication détecté</div>
-            <div style="color:#64748b;">Les données ne contiennent pas d'informations sur les ordres de fabrication.</div>
+            <div style="color:#546e7a;">Les données ne contiennent pas d'informations sur les ordres de fabrication.</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -755,12 +755,12 @@ def calculate_operational_metrics(filtered_data):
 
 def create_chain_dashboard(filtered_data, chain_id):
     """Create dashboard for a specific chain"""
-    # Enhanced header styling
+    # Enhanced header styling with emoji instead of FontAwesome
     st.markdown(f"""
-    <div style='background-color:#1e3a8a; color:white; padding:15px; text-align:center; 
+    <div style='background-color:#0d47a1; color:white; padding:15px; text-align:center; 
          font-size:22px; font-weight:bold; margin-bottom:25px; border-radius:8px; 
          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);'>
-        <i class="fas fa-industry"></i> Dashboard Opérationnel Chaîne Confection N° {chain_id}
+        🏭 Dashboard Opérationnel Chaîne Confection N° {chain_id}
     </div>
     """, unsafe_allow_html=True)
     
@@ -833,12 +833,12 @@ def create_chain_dashboard(filtered_data, chain_id):
     """, unsafe_allow_html=True)
     
     # Create two main sections with modern styling
-    # 1. Retouche Fin Chaîne (NRFC, TRFC, TepRFC, ThRFC)
+    # 1. Retouche Fin Chaîne (NRFC, TRFC, TepRFC, ThRFC) - with emoji instead of FontAwesome
     st.markdown("""
-    <div style='background-color:#f8fafc; border-left:5px solid #3b82f6; padding:10px 15px; 
-         margin-bottom:20px; font-weight:bold; color:#1e3a8a; border-radius:4px;
+    <div style='background-color:#f8fafc; border-left:5px solid #2196f3; padding:10px 15px; 
+         margin-bottom:20px; font-weight:bold; color:#0d47a1; border-radius:4px;
          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);'>
-        <i class="fas fa-tools"></i> Retouche Fin Chaîne
+        🔧 Retouche Fin Chaîne
     </div>
     """, unsafe_allow_html=True)
     
@@ -894,12 +894,12 @@ def create_chain_dashboard(filtered_data, chain_id):
         # Create the element grid for fin chaîne
         create_element_grid(filtered_data, mode="fin_chaine")
     
-    # 2. Retouche Encours Chaîne (NREC, TREC, TepREC, ThREC)
+    # 2. Retouche Encours Chaîne (NREC, TREC, TepREC, ThREC) - with emoji instead of FontAwesome
     st.markdown("""
-    <div style='background-color:#f8fafc; border-left:5px solid #3b82f6; padding:10px 15px; 
-         margin:25px 0 20px 0; font-weight:bold; color:#1e3a8a; border-radius:4px;
+    <div style='background-color:#f8fafc; border-left:5px solid #2196f3; padding:10px 15px; 
+         margin:25px 0 20px 0; font-weight:bold; color:#0d47a1; border-radius:4px;
          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);'>
-        <i class="fas fa-sync-alt"></i> Retouche Encours Chaîne
+        🔄 Retouche Encours Chaîne
     </div>
     """, unsafe_allow_html=True)
     
@@ -957,12 +957,12 @@ def create_chain_dashboard(filtered_data, chain_id):
 
 def create_rebutage_dashboard(filtered_data, chain_id):
     """Create dashboard for rebutage (second part)"""
-    # Enhanced header styling
+    # Enhanced header styling with emoji instead of FontAwesome
     st.markdown(f"""
-    <div style='background-color:#1e3a8a; color:white; padding:15px; text-align:center; 
+    <div style='background-color:#0d47a1; color:white; padding:15px; text-align:center; 
          font-size:22px; font-weight:bold; margin-bottom:25px; border-radius:8px; 
          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);'>
-        <i class="fas fa-recycle"></i> Dashboard Opérationnel Repassage Ch : {chain_id}
+        🔄 Dashboard Opérationnel Repassage Ch : {chain_id}
     </div>
     """, unsafe_allow_html=True)
     
@@ -994,7 +994,7 @@ def create_rebutage_dashboard(filtered_data, chain_id):
     <div style='background-color:#f8fafc; border-left:5px solid #0ea5e9; padding:10px 15px; 
          margin-bottom:20px; font-weight:bold; color:#0369a1; border-radius:4px;
          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);'>
-        <i class="fas fa-tasks"></i> Taux d'avancement contrôle
+        📊 Taux d'avancement contrôle
     </div>
     """, unsafe_allow_html=True)
     
@@ -1026,7 +1026,7 @@ def create_rebutage_dashboard(filtered_data, chain_id):
         <div style='background-color:white; border-radius:8px; padding:15px; margin-bottom:15px; 
              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);'>
             <div style='font-size:16px; margin-bottom:15px; color:#1e3a8a; font-weight:bold;'>
-                <i class="fas fa-info-circle"></i> Information d'avancement
+                ℹ️ Information d'avancement
             </div>
             
             <div style='display:grid; grid-template-columns: 1fr 1fr; gap:10px;'>
@@ -1058,7 +1058,7 @@ def create_rebutage_dashboard(filtered_data, chain_id):
     <div style='background-color:#f8fafc; border-left:5px solid #ef4444; padding:10px 15px; 
          margin:25px 0 20px 0; font-weight:bold; color:#b91c1c; border-radius:4px;
          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);'>
-        <i class="fas fa-ban"></i> Rebut Cumulée
+        🚫 Rebut Cumulée
     </div>
     """, unsafe_allow_html=True)
     
@@ -1101,7 +1101,7 @@ def create_rebutage_dashboard(filtered_data, chain_id):
     <div style='background-color:#f8fafc; border-left:5px solid #ef4444; padding:10px 15px; 
          margin:25px 0 20px 0; font-weight:bold; color:#b91c1c; border-radius:4px;
          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);'>
-        <i class="fas fa-tools"></i> Retouche Cumulée
+        🔧 Retouche Cumulée
     </div>
     """, unsafe_allow_html=True)
     
@@ -1141,6 +1141,28 @@ def create_rebutage_dashboard(filtered_data, chain_id):
         
 def create_operational_dashboard(data):
     """Main function to create the operational dashboard"""
+    # Add FontAwesome for icons and enhance sidebar styling
+    st.markdown("""
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+    .icon-blue { color: #0d47a1; }
+    .icon-red { color: #d32f2f; }
+    .icon-green { color: #388e3c; }
+    .icon-orange { color: #f57c00; }
+    
+    /* Improve overall text colors for better readability */
+    h1, h2, h3 { color: #0d47a1 !important; }
+    
+    /* Fix color issues with better contrast */
+    div[data-testid="stMetric"] > div:nth-child(1) {
+        color: #0d47a1 !important;
+    }
+    div[data-testid="stMetric"] > div:nth-child(2) {
+        color: #102a43 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Enhance sidebar styling
     st.sidebar.markdown("""
     <style>
@@ -1148,7 +1170,7 @@ def create_operational_dashboard(data):
         background-color: #f8fafc;
     }
     .sidebar-title {
-        background-color: #1e3a8a;
+        background-color: #0d47a1;
         color: white;
         padding: 15px 10px;
         margin: -1rem -1rem 1rem -1rem;
@@ -1162,26 +1184,26 @@ def create_operational_dashboard(data):
         padding: 15px;
         margin-bottom: 15px;
         border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     .filter-header {
-        color: #1e3a8a;
+        color: #0d47a1;
         font-weight: bold;
         font-size: 16px;
         margin-bottom: 10px;
-        border-bottom: 2px solid #e2e8f0;
+        border-bottom: 2px solid #bbdefb;
         padding-bottom: 5px;
     }
     </style>
     
     <div class="sidebar-title">
-        <i class="fas fa-sliders-h"></i> Contrôles du Dashboard
+        ⚙️ Contrôles du Dashboard
     </div>
     """, unsafe_allow_html=True)
     
-    # Date filter section with improved styling
+    # Date filter section with improved styling (using emoji instead of FontAwesome)
     st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.sidebar.markdown('<div class="filter-header"><i class="fas fa-calendar-alt"></i> Période</div>', unsafe_allow_html=True)
+    st.sidebar.markdown('<div class="filter-header">📅 Période</div>', unsafe_allow_html=True)
     
     # Try to get min/max dates or use defaults
     try:
@@ -1197,7 +1219,7 @@ def create_operational_dashboard(data):
     
     # Chain filter section with improved styling
     st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.sidebar.markdown('<div class="filter-header"><i class="fas fa-industry"></i> Sélection Chaîne</div>', unsafe_allow_html=True)
+    st.sidebar.markdown('<div class="filter-header">🏭 Sélection Chaîne</div>', unsafe_allow_html=True)
     
     # Get chain options
     chain_options = data['IDChaineMontage'].unique().tolist() if 'IDChaineMontage' in data.columns else []
@@ -1230,7 +1252,7 @@ def create_operational_dashboard(data):
     
     # Add export options and supplementary information in sidebar
     st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.sidebar.markdown('<div class="filter-header"><i class="fas fa-file-export"></i> Exporter</div>', unsafe_allow_html=True)
+    st.sidebar.markdown('<div class="filter-header">📤 Exporter</div>', unsafe_allow_html=True)
     export_format = st.sidebar.selectbox("Format", ["Excel", "CSV", "PDF"])
     if st.sidebar.button("Télécharger le rapport"):
         st.sidebar.success("Rapport généré. Le téléchargement va commencer.")
@@ -1238,7 +1260,7 @@ def create_operational_dashboard(data):
     
     # Add help section
     st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.sidebar.markdown('<div class="filter-header"><i class="fas fa-question-circle"></i> Aide</div>', unsafe_allow_html=True)
+    st.sidebar.markdown('<div class="filter-header">❓ Aide</div>', unsafe_allow_html=True)
     st.sidebar.info("Pour plus d'informations sur les indicateurs et les métriques utilisées, contactez le service qualité.")
     st.sidebar.markdown('</div>', unsafe_allow_html=True)
     
