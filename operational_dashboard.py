@@ -273,12 +273,20 @@ def calculate_operational_metrics(filtered_data):
     
     # 3. Temps de retouches Fin Chaîne (TepRFC)
     if temps_column and operation_column and not fin_chaine_data.empty:
-        # Select operations that start with "fixation" in Fin Chaîne
-        fixation_ops = fin_chaine_data[fin_chaine_data[operation_column].str.lower().str.startswith('fixation')] if operation_column else pd.DataFrame()
-        metrics['fin_chaine_time'] = fixation_ops[temps_column].sum() if not fixation_ops.empty and temps_column else 0
-        
-        # If no fixation operations or no time, fallback
-        if metrics['fin_chaine_time'] == 0:
+        try:
+            # Make sure we're only working with string operations
+            fin_chaine_data_with_str_op = fin_chaine_data.copy()
+            fin_chaine_data_with_str_op[operation_column] = fin_chaine_data_with_str_op[operation_column].astype(str)
+            
+            # Select operations that start with "fixation" in Fin Chaîne
+            fixation_ops = fin_chaine_data_with_str_op[fin_chaine_data_with_str_op[operation_column].str.lower().str.startswith('fixation')]
+            metrics['fin_chaine_time'] = fixation_ops[temps_column].sum() if not fixation_ops.empty and temps_column else 0
+            
+            # If no fixation operations or no time, fallback
+            if metrics['fin_chaine_time'] == 0:
+                metrics['fin_chaine_time'] = fin_chaine_data[temps_column].sum() if temps_column else metrics['fin_chaine_count'] * 5
+        except (ValueError, AttributeError, TypeError):
+            # If there's any error processing the string operations, fall back to a simpler calculation
             metrics['fin_chaine_time'] = fin_chaine_data[temps_column].sum() if temps_column else metrics['fin_chaine_count'] * 5
     else:
         # Default estimation
@@ -312,12 +320,20 @@ def calculate_operational_metrics(filtered_data):
     
     # 7. Temps de retouches Encours Chaîne (TepREC)
     if temps_column and operation_column and not encours_data.empty:
-        # Select operations that start with "fixation" in Encours Chaîne
-        fixation_ops_encours = encours_data[encours_data[operation_column].str.lower().str.startswith('fixation')] if operation_column else pd.DataFrame()
-        metrics['encours_time'] = fixation_ops_encours[temps_column].sum() if not fixation_ops_encours.empty and temps_column else 0
-        
-        # If no fixation operations or no time, fallback
-        if metrics['encours_time'] == 0:
+        try:
+            # Make sure we're only working with string operations
+            encours_data_with_str_op = encours_data.copy()
+            encours_data_with_str_op[operation_column] = encours_data_with_str_op[operation_column].astype(str)
+            
+            # Select operations that start with "fixation" in Encours Chaîne
+            fixation_ops_encours = encours_data_with_str_op[encours_data_with_str_op[operation_column].str.lower().str.startswith('fixation')]
+            metrics['encours_time'] = fixation_ops_encours[temps_column].sum() if not fixation_ops_encours.empty and temps_column else 0
+            
+            # If no fixation operations or no time, fallback
+            if metrics['encours_time'] == 0:
+                metrics['encours_time'] = encours_data[temps_column].sum() if temps_column else metrics['encours_count'] * 5
+        except (ValueError, AttributeError, TypeError):
+            # If there's any error processing the string operations, fall back to a simpler calculation
             metrics['encours_time'] = encours_data[temps_column].sum() if temps_column else metrics['encours_count'] * 5
     else:
         # Default estimation
@@ -364,12 +380,21 @@ def calculate_operational_metrics(filtered_data):
     
     # 14. Temps de retouches cumulé (en heures)
     if temps_column and operation_column:
-        # Find all operations starting with "fix" or "fixation"
-        fixation_ops_all = filtered_data[filtered_data[operation_column].str.lower().str.startswith('fix')] if operation_column else pd.DataFrame()
-        total_temps = fixation_ops_all[temps_column].sum() if not fixation_ops_all.empty and temps_column else 0
-        
-        # If no fixation operations found, use all retouche operations
-        if total_temps == 0:
+        try:
+            # Make sure we're only working with string operations
+            # First convert operation column to string type safely
+            filtered_data_with_str_op = filtered_data.copy()
+            filtered_data_with_str_op[operation_column] = filtered_data_with_str_op[operation_column].astype(str)
+            
+            # Find all operations starting with "fix" or "fixation"
+            fixation_ops_all = filtered_data_with_str_op[filtered_data_with_str_op[operation_column].str.lower().str.startswith('fix')]
+            total_temps = fixation_ops_all[temps_column].sum() if not fixation_ops_all.empty and temps_column else 0
+            
+            # If no fixation operations found, use all retouche operations
+            if total_temps == 0:
+                total_temps = retouche_data[temps_column].sum() if temps_column and not retouche_data.empty else metrics['retouche_total_count'] * 5
+        except (ValueError, AttributeError, TypeError):
+            # If there's any error processing the string operations, fall back to a simpler calculation
             total_temps = retouche_data[temps_column].sum() if temps_column and not retouche_data.empty else metrics['retouche_total_count'] * 5
             
         # Convert to hours
