@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.11"
 dependencies = [
-    "anthropic>=0.49.0",
     "dash>=3.0.1",
     "dash-bootstrap-components>=2.0.0",
     "flask-caching>=2.3.1",
@@ -12,5 +11,4 @@ dependencies = [
     "pandas>=2.2.3",
     "plotly>=6.0.1",
     "streamlit>=1.44.0",
-    "trafilatura>=2.0.0",
 ]

@@ -39,7 +39,7 @@ args = """
 mkdir -p .streamlit && echo '[server]
 headless = true
 address = \"0.0.0.0\"
-port = 5000' > .streamlit/config.toml && streamlit run new_app.py --server.port 5000"""
+port = 5000' > .streamlit/config.toml && streamlit run app.py --server.port 5000"""
 waitForPort = 5000
 
 [[workflows.workflow]]
