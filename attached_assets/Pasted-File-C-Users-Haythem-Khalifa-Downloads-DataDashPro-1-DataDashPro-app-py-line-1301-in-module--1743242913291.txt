@@ -1,0 +1,33 @@
+File "C:\Users\Haythem Khalifa\Downloads\DataDashPro (1)\DataDashPro\app.py", line 1301, in <module>
+    main()
+File "C:\Users\Haythem Khalifa\Downloads\DataDashPro (1)\DataDashPro\app.py", line 1297, in main
+    dashboard_page(data)
+File "C:\Users\Haythem Khalifa\Downloads\DataDashPro (1)\DataDashPro\app.py", line 1258, in dashboard_page
+    create_operational_dashboard(data)
+File "C:\Users\Haythem Khalifa\Downloads\DataDashPro (1)\DataDashPro\operational_dashboard.py", line 461, in create_operational_dashboard
+    start_date = st.sidebar.date_input("Date de début", value=pd.to_datetime(data['DATE'].min()).date() if 'DATE' in data.columns else None)
+                                                                             ^^^^^^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\series.py", line 6507, in min
+    return NDFrame.min(self, axis, skipna, numeric_only, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\generic.py", line 12388, in min
+    return self._stat_function(
+           ^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\generic.py", line 12377, in _stat_function
+    return self._reduce(
+           ^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\series.py", line 6457, in _reduce
+    return op(delegate, skipna=skipna, **kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\nanops.py", line 147, in f
+    result = alt(values, axis=axis, skipna=skipna, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\nanops.py", line 404, in new_func
+    result = func(values, axis=axis, skipna=skipna, mask=mask, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\nanops.py", line 1098, in reduction
+    result = getattr(values, meth)(axis)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\Haythem Khalifa\AppData\Local\Programs\Python\Python311\Lib\site-packages\numpy\core\_methods.py", line 45, in _amin
+    return umr_minimum(a, axis, None, out, keepdims, initial, where)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
