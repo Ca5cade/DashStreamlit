@@ -471,9 +471,12 @@ def calculate_operational_metrics(filtered_data):
 
 def create_chain_dashboard(filtered_data, chain_id):
     """Create dashboard for a specific chain"""
+    # Display title based on whether a specific chain is selected or all chains
+    title = "Dashboard Opérationnel Chaîne Confection - Toutes les chaînes" if chain_id is None else f"Dashboard Opérationnel Chaîne Confection N° : {chain_id}"
+    
     st.markdown(f"""
-    <div style='background-color:#2c3e50; color:white; padding:10px; text-align:center; font-size:20px; margin-bottom:20px; border-radius:5px;'>
-        DahBoard Opérationnel Chaîne Confection N : {chain_id}
+    <div style='background-color:#2c3e50; color:#f8f9fa; padding:10px; text-align:center; font-size:18px; margin-bottom:20px; border-radius:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);'>
+        <span style='font-weight:600;'>{title}</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -483,8 +486,8 @@ def create_chain_dashboard(filtered_data, chain_id):
     # Create two main sections
     # 1. Retouche Fin Chaîne
     st.markdown("""
-    <div style='border:2px solid #e74c3c; padding:5px; text-align:center; margin-bottom:10px; font-weight:bold; color:#e74c3c;'>
-        Retouche Fin Chaîne
+    <div style='border:2px solid #e74c3c; padding:8px; text-align:center; margin-bottom:12px; font-weight:bold; color:#e74c3c; border-radius:4px; background-color:#fcf3f3;'>
+        <span style='font-size:16px;'>Retouche Fin Chaîne</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -522,8 +525,8 @@ def create_chain_dashboard(filtered_data, chain_id):
     
     # 2. Retouche Encours Chaîne
     st.markdown("""
-    <div style='border:2px solid #e74c3c; padding:5px; text-align:center; margin-bottom:10px; margin-top:20px; font-weight:bold; color:#e74c3c;'>
-        Retouche Encours Chaîne
+    <div style='border:2px solid #e74c3c; padding:8px; text-align:center; margin-bottom:12px; margin-top:20px; font-weight:bold; color:#e74c3c; border-radius:4px; background-color:#fcf3f3;'>
+        <span style='font-size:16px;'>Retouche Encours Chaîne</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -561,9 +564,12 @@ def create_chain_dashboard(filtered_data, chain_id):
 
 def create_rebutage_dashboard(filtered_data, chain_id):
     """Create dashboard for rebutage (second part)"""
+    # Display title based on whether a specific chain is selected or all chains
+    title = "Dashboard Opérationnel Repassage - Toutes les chaînes" if chain_id is None else f"Dashboard Opérationnel Repassage Ch : {chain_id}"
+    
     st.markdown(f"""
-    <div style='background-color:#2c3e50; color:white; padding:10px; text-align:center; font-size:20px; margin-bottom:20px; border-radius:5px;'>
-        DahBoard Opérationnel Repassage Ch : {chain_id}
+    <div style='background-color:#2c3e50; color:#f8f9fa; padding:10px; text-align:center; font-size:18px; margin-bottom:20px; border-radius:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);'>
+        <span style='font-weight:600;'>{title}</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -572,8 +578,8 @@ def create_rebutage_dashboard(filtered_data, chain_id):
     
     # 1. Taux d'avancement contrôle section
     st.markdown("""
-    <div style='border:2px solid #3498db; padding:5px; text-align:center; margin-bottom:10px; font-weight:bold; color:#3498db;'>
-        Taux d'avancement contrôle
+    <div style='border:2px solid #3498db; padding:8px; text-align:center; margin-bottom:12px; font-weight:bold; color:#3498db; border-radius:4px; background-color:#edf7fd;'>
+        <span style='font-size:16px;'>Taux d'avancement contrôle</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -595,8 +601,8 @@ def create_rebutage_dashboard(filtered_data, chain_id):
     
     # 2. Rebut Cumulée
     st.markdown("""
-    <div style='border:2px solid #e74c3c; padding:5px; text-align:center; margin-bottom:10px; font-weight:bold; color:#e74c3c;'>
-        Rebut Cumulée
+    <div style='border:2px solid #e74c3c; padding:8px; text-align:center; margin-bottom:12px; font-weight:bold; color:#e74c3c; border-radius:4px; background-color:#fcf3f3;'>
+        <span style='font-size:16px;'>Rebut Cumulée</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -634,8 +640,8 @@ def create_rebutage_dashboard(filtered_data, chain_id):
     
     # 2. Retouche Cumulée
     st.markdown("""
-    <div style='border:2px solid #e74c3c; padding:5px; text-align:center; margin-bottom:10px; margin-top:20px; font-weight:bold; color:#e74c3c;'>
-        Retouche Cumulée
+    <div style='border:2px solid #e74c3c; padding:8px; text-align:center; margin-bottom:12px; margin-top:20px; font-weight:bold; color:#e74c3c; border-radius:4px; background-color:#fcf3f3;'>
+        <span style='font-size:16px;'>Retouche Cumulée</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -667,10 +673,18 @@ def create_rebutage_dashboard(filtered_data, chain_id):
 def create_operational_dashboard(data):
     """Main function to create the operational dashboard"""
     # Create sidebar filters for operational dashboard
-    st.sidebar.markdown("## Filtres")
+    st.sidebar.markdown("""
+        <div style='background-color:#2c3e50; color:#f8f9fa; padding:10px; text-align:center; margin-bottom:15px; border-radius:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);'>
+            <h2 style='margin:0; font-size:20px; font-weight:600;'>Filtres</h2>
+        </div>
+    """, unsafe_allow_html=True)
     
     # Date filter
-    st.sidebar.markdown("### Période")
+    st.sidebar.markdown("""
+        <div style='background-color:#eaecee; color:#2c3e50; padding:8px; margin-bottom:10px; border-radius:4px; font-weight:600; font-size:16px;'>
+            Période
+        </div>
+    """, unsafe_allow_html=True)
     start_date = st.sidebar.date_input("Date de début", value=pd.to_datetime(data['DATE'].min()).date() if 'DATE' in data.columns else None)
     end_date = st.sidebar.date_input("Date de fin", value=pd.to_datetime(data['DATE'].max()).date() if 'DATE' in data.columns else None)
     
@@ -685,7 +699,19 @@ def create_operational_dashboard(data):
     if not chain_options:
         chain_options = ["Chaîne 1", "Chaîne 2", "Chaîne 3"]
     
-    selected_chain = st.sidebar.selectbox("Chaîne", chain_options, index=0)
+    # Add "All" option at the beginning of options
+    chain_options_with_all = ["Toutes les chaînes"] + sorted([str(c) for c in chain_options])
+    
+    selected_chain_option = st.sidebar.selectbox(
+        "Chaîne", 
+        chain_options_with_all,
+        index=0,
+        format_func=lambda x: x if x != "Toutes les chaînes" else "✅ Toutes les chaînes"
+    )
+    
+    # Determine if "All" was selected
+    all_chains_selected = selected_chain_option == "Toutes les chaînes"
+    selected_chain = None if all_chains_selected else selected_chain_option
     
     # Apply filters to data
     filtered_data = data.copy()
@@ -694,16 +720,22 @@ def create_operational_dashboard(data):
     if 'DATE' in filtered_data.columns:
         filtered_data = apply_date_filter(filtered_data, start_date, end_date)
     
-    # Apply chain filter
-    if 'IDChaineMontage' in filtered_data.columns:
-        filtered_data = apply_categorical_filter(filtered_data, 'IDChaineMontage', [selected_chain])
-    elif 'Chaine' in filtered_data.columns:
-        filtered_data = apply_categorical_filter(filtered_data, 'Chaine', [selected_chain])
-    elif 'idchaine' in filtered_data.columns:
-        filtered_data = apply_categorical_filter(filtered_data, 'idchaine', [selected_chain])
+    # Apply chain filter only if a specific chain is selected
+    if selected_chain is not None:
+        if 'IDChaineMontage' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'IDChaineMontage', [selected_chain])
+        elif 'Chaine' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'Chaine', [selected_chain])
+        elif 'idchaine' in filtered_data.columns:
+            filtered_data = apply_categorical_filter(filtered_data, 'idchaine', [selected_chain])
     
-    # Create dashboard tabs
-    tab1, tab2 = st.tabs(["Dashboard Chaîne Confection", "Dashboard Repassage"])
+    # If "All" is selected, we keep all chains in the filtered data
+    
+    # Create dashboard tabs with larger, more visible text
+    tab1, tab2 = st.tabs([
+        "📊 Dashboard Chaîne Confection", 
+        "🔄 Dashboard Repassage"
+    ])
     
     with tab1:
         # Create chain dashboard (first part)
