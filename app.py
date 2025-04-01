@@ -71,7 +71,11 @@ if 'user_role' not in st.session_state:
 def load_data():
     """Load and preprocess the dataset from res.csv"""
     try:
-        csv_path = "res.csv"
+        # First try the attached_assets path
+        csv_path = "attached_assets/res.csv"
+        if not os.path.exists(csv_path):
+            # Fallback to root directory
+            csv_path = "res.csv"
         
         if os.path.exists(csv_path):
             try:
