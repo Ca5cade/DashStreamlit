@@ -51,6 +51,23 @@ except:
         margin-top: 5px;
         color: white;
     }
+    .warning-message {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .warning-message button {
+        background: none;
+        border: none;
+        color: #c62828;
+        cursor: pointer;
+        font-weight: bold;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -65,11 +82,21 @@ if 'dashboard_type' not in st.session_state:
     st.session_state.dashboard_type = "strategic"
 if 'user_role' not in st.session_state:
     st.session_state.user_role = "standard"
+# Add session state for warning message
+if 'show_warning' not in st.session_state:
+    st.session_state.show_warning = True
+
+# Add a session state variable for rework factor if it doesn't exist
+if 'rework_factor' not in st.session_state:
+    st.session_state.rework_factor = 3
 
 # Data loading function
 @st.cache_data(ttl=600)
-def load_data():
+def load_data(version=1):  # Add version parameter to force cache reset
     """Load and preprocess the dataset from res.csv"""
+    # Force clear the cache
+    load_data.clear()
+    print("Cache cleared! Loading data with new CNQ calculation...")
     try:
         # First try the attached_assets path
         csv_path = "attached_assets/res.csv"
@@ -79,7 +106,7 @@ def load_data():
         
         if os.path.exists(csv_path):
             try:
-                print("Loading CSV file...")
+                print("Loading CSV file with new CNQ calculation (v2)...")
                 # Load with proper encoding detection
                 try:
                     data = pd.read_csv(csv_path, encoding='utf-8')
@@ -129,47 +156,85 @@ def load_data():
                     if old_col in data.columns:
                         data[new_col] = data[old_col]
                 
-                # Calculate CNQ components
-                # Retouche (rework) based on NbrReclamations
-                if 'NbrReclamations' in data.columns or 'nbrreclamations' in data.columns:
-                    col_name = 'NbrReclamations' if 'NbrReclamations' in data.columns else 'nbrreclamations'
-                    rework_cost = 50  # Cost per rework
-                    data['Retouche'] = data[col_name].fillna(0).astype(float) * rework_cost
-                else:
-                    data['Retouche'] = 0
+                # Calculate CNQ components based on the NEW formula
+                # CNQ = (Qté with defect × Rework cost per unit) + (Cut quantity × Scrap cost per unit) + (Sum of penalties per defect)
                 
-                # Rebut (scrap) based on DeuxiemeChoix (second choice/defective items)
-                if 'DeuxiemeChoix' in data.columns or 'deuxiemechoix' in data.columns:
-                    col_name = 'DeuxiemeChoix' if 'DeuxiemeChoix' in data.columns else 'deuxiemechoix'
-                    scrap_cost = 100  # Cost per scrapped item
-                    data['Rebut'] = data[col_name].fillna(0).astype(float) * scrap_cost
-                else:
-                    data['Rebut'] = 0
+                # Get rework factor from session state
+                rework_factor = st.session_state.rework_factor
                 
-                # Penalite (penalties) based on Note (assuming it represents penalty score)
-                if 'Note' in data.columns or 'note' in data.columns:
-                    col_name = 'Note' if 'Note' in data.columns else 'note'
-                    penalty_cost = 75  # Cost per penalty point
-                    data['Penalite'] = data[col_name].fillna(0).astype(float) * penalty_cost
+                # 1. Rework cost calculation
+                # Check for temps (unit time) and tauxhoraire (hourly rate) columns
+                if 'temps' in data.columns and 'tauxhoraire' in data.columns:
+                    # Calculate unit rework cost
+                    data['CoutRetoucheUnitaire'] = data['temps'] * data['tauxhoraire'] * rework_factor
+                    
+                    # Calculate total rework cost if we have defect quantity
+                    if 'NbrReclamations' in data.columns:
+                        data['Retouche'] = data['NbrReclamations'].fillna(0) * data['CoutRetoucheUnitaire']
+                    else:
+                        data['Retouche'] = 0
                 else:
-                    data['Penalite'] = 0
+                    # Fallback to old calculation
+                    if 'NbrReclamations' in data.columns:
+                        rework_cost = 50  # Default cost per rework
+                        data['CoutRetoucheUnitaire'] = rework_cost
+                        data['Retouche'] = data['NbrReclamations'].fillna(0) * rework_cost
+                    else:
+                        data['CoutRetoucheUnitaire'] = 0
+                        data['Retouche'] = 0
+                
+                # 2. Scrap cost calculation
+                # Check for prix (price) column
+                if 'prix' in data.columns:
+                    # Use price as scrap cost per unit
+                    data['CoutRebutUnitaire'] = data['prix']
+                    
+                    # Calculate total scrap cost if we have second choice quantity
+                    if 'DeuxiemeChoix' in data.columns:
+                        data['Rebut'] = data['DeuxiemeChoix'].fillna(0) * data['CoutRebutUnitaire']
+                    else:
+                        data['Rebut'] = 0
+                else:
+                    # Fallback to old calculation
+                    if 'DeuxiemeChoix' in data.columns:
+                        scrap_cost = 100  # Default cost per scrapped item
+                        data['CoutRebutUnitaire'] = scrap_cost
+                        data['Rebut'] = data['DeuxiemeChoix'].fillna(0) * scrap_cost
+                    else:
+                        data['CoutRebutUnitaire'] = 0
+                        data['Rebut'] = 0
+                
+                # 3. Penalty calculation
+                # Check for new penalty columns
+                if 'MontantPenalite' in data.columns:
+                    # Use direct penalty amount
+                    data['Penalite'] = data['MontantPenalite'].fillna(0)
+                else:
+                    # Fallback to old calculation
+                    if 'Note' in data.columns:
+                        penalty_cost = 75  # Default cost per penalty point
+                        data['Penalite'] = data['Note'].fillna(0) * penalty_cost
+                    else:
+                        data['Penalite'] = 0
                 
                 # Calculate total CNQ
                 data['CNQ'] = data['Retouche'] + data['Rebut'] + data['Penalite']
                 
-                # Calculate CNQ percentage using ValeurOF (OF value) if available
-                if 'ValeurOF' in data.columns or 'valeurof' in data.columns:
-                    col_name = 'ValeurOF' if 'ValeurOF' in data.columns else 'valeurof'
-                    data['CNQ_Percentage'] = (data['CNQ'] / data[col_name].replace(0, np.nan)) * 100
-                else:
+                # Calculate CNQ percentage - with reasonable limits
+                if 'ValeurOF' in data.columns and data['ValeurOF'].sum() > 0:
+                    # Use ValeurOF as the base for percentage calculation
+                    data['CNQ_Percentage'] = (data['CNQ'] / data['ValeurOF'].replace(0, np.nan)) * 100
+                elif 'Quantite' in data.columns:
                     # Fallback to using quantity with assumed unit price
                     unit_price = 100  # Assumed price per unit
-                    try:
-                        data['Quantite'] = data['Quantite'].fillna(0).astype(float)
-                        total_value = data['Quantite'] * unit_price
-                        data['CNQ_Percentage'] = (data['CNQ'] / total_value.replace(0, np.nan)) * 100
-                    except:
-                        data['CNQ_Percentage'] = 0
+                    data['Quantite'] = data['Quantite'].fillna(0)
+                    total_value = data['Quantite'] * unit_price
+                    data['CNQ_Percentage'] = (data['CNQ'] / total_value.replace(0, np.nan)) * 100
+                else:
+                    data['CNQ_Percentage'] = 0
+
+                # Cap the CNQ percentage at a reasonable maximum (e.g., 100%)
+                data['CNQ_Percentage'] = data['CNQ_Percentage'].clip(upper=100)
                 
                 # Fill NaN values with 0
                 data = data.fillna(0)
@@ -196,9 +261,10 @@ def load_data():
         st.error(f"Unexpected error in load_data: {str(e)}")
         return create_sample_data()
 
+# Update the create_sample_data function to use the rework factor from session state
 def create_sample_data():
     """Create sample data for testing when CSV cannot be loaded"""
-    st.warning("Using sample data for demonstration purposes")
+    st.warning("Using sample data with NEW CNQ calculation formula")
     
     # Create date range
     dates = pd.date_range(start='2023-01-01', end='2023-12-31', freq='D')
@@ -213,27 +279,39 @@ def create_sample_data():
         'Quantite': np.random.randint(100, 1000, n_rows),
         'NbrReclamations': np.random.poisson(2, n_rows),
         'DeuxiemeChoix': np.random.binomial(1, 0.05, n_rows),
-        'Note': np.random.randint(0, 5, n_rows)
+        'temps': np.random.uniform(0.5, 2.0, n_rows),  # Unit time in hours
+        'tauxhoraire': np.random.choice([15, 20, 25], n_rows),  # Hourly rate
+        'prix': np.random.uniform(50, 200, n_rows),  # Unit price
+        'MontantPenalite': np.random.uniform(0, 100, n_rows),  # Penalty amount
+        'TypeDefaut': np.random.choice(['Type A', 'Type B', 'Type C'], n_rows)  # Defect type
     })
     
     # Extract month and year
     data['Month'] = data['DATE'].dt.month
     data['Year'] = data['DATE'].dt.year
     
-    # Calculate CNQ components
-    rework_cost = 50
-    scrap_cost = 100
-    penalty_cost = 75
+    # Calculate CNQ components using NEW formula
+    rework_factor = st.session_state.rework_factor
     
-    data['Retouche'] = data['NbrReclamations'] * rework_cost
-    data['Rebut'] = data['DeuxiemeChoix'] * scrap_cost
-    data['Penalite'] = data['Note'] * penalty_cost
+    # 1. Rework cost calculation
+    data['CoutRetoucheUnitaire'] = data['temps'] * data['tauxhoraire'] * rework_factor
+    data['Retouche'] = data['NbrReclamations'] * data['CoutRetoucheUnitaire']
+    
+    # 2. Scrap cost calculation
+    data['CoutRebutUnitaire'] = data['prix']
+    data['Rebut'] = data['DeuxiemeChoix'] * data['CoutRebutUnitaire']
+    
+    # 3. Penalty calculation
+    data['Penalite'] = data['MontantPenalite']
+    
+    # Calculate total CNQ
     data['CNQ'] = data['Retouche'] + data['Rebut'] + data['Penalite']
     
-    # Calculate CNQ percentage
+    # Calculate CNQ percentage with reasonable limits
     unit_price = 100  # Assumed price per unit
     total_value = data['Quantite'] * unit_price
-    data['CNQ_Percentage'] = (data['CNQ'] / total_value) * 100
+    data['CNQ_Percentage'] = (data['CNQ'] / total_value.replace(0, np.nan)) * 100
+    data['CNQ_Percentage'] = data['CNQ_Percentage'].clip(upper=100)  # Cap at 100%
     
     return data
 
@@ -241,12 +319,20 @@ def create_sample_data():
 from utils import apply_date_filter, apply_categorical_filter, apply_numerical_filter
 from utils import apply_all_filters, calculate_aggregations, create_graph, create_gauge_chart
 
+# Function to dismiss warning
+def dismiss_warning():
+    st.session_state.show_warning = False
+
 # Login page
 def login_page():
+    # Display the logo at the top of the login page
+    _, col_logo, _ = st.columns([1, 0.5, 1])
+    with col_logo:
+        st.image("logo.png", width=450)
+        
     st.markdown("""
     <div class="login-container">
         <div class="login-form">
-            <i class="fas fa-chart-line fa-4x mb-3" style="color: #2dcecc;"></i>
             <h1 class="company-title mb-4">KnitWear Manufacturing</h1>
             <h2>Welcome Back</h2>
             <p class="text-muted mb-4">Please sign in to continue</p>
@@ -277,6 +363,7 @@ def login_page():
                 st.session_state.current_page = "dashboard"
                 st.session_state.dashboard_type = "strategic"
                 st.session_state.user_role = "admin"
+                st.session_state.show_warning = True  # Reset warning on login
                 st.rerun()
             elif username == "tact" and password == "tact":
                 st.session_state.authenticated = True
@@ -284,6 +371,7 @@ def login_page():
                 st.session_state.current_page = "dashboard"
                 st.session_state.dashboard_type = "tactical"
                 st.session_state.user_role = "tactical"
+                st.session_state.show_warning = True  # Reset warning on login
                 st.rerun()
             elif username == "oper" and password == "oper":
                 st.session_state.authenticated = True
@@ -291,6 +379,7 @@ def login_page():
                 st.session_state.current_page = "dashboard"
                 st.session_state.dashboard_type = "operational"
                 st.session_state.user_role = "operational"
+                st.session_state.show_warning = True  # Reset warning on login
                 st.rerun()
             else:
                 st.error("Invalid username or password")
@@ -298,6 +387,9 @@ def login_page():
 # Create sidebar
 def create_sidebar():
     with st.sidebar:
+        # Add logo to the sidebar
+        st.image("logo.png", width=100)
+        
         # Show different dashboard title based on user type
         if st.session_state.dashboard_type == "tactical":
             st.markdown("## Tactical Dashboard")
@@ -341,9 +433,8 @@ def create_sidebar():
 def create_header():
     col1, col2 = st.columns([1, 5])
     with col1:
-        st.markdown("""
-        <i class="fas fa-chart-line fa-3x" style="color: #2dcecc;"></i>
-        """, unsafe_allow_html=True)
+        # Display the company logo instead of the icon
+        st.image("logo.png", width=450)
     with col2:
         st.title("KnitWear Manufacturing")
         if st.session_state.dashboard_type == "tactical":
@@ -352,6 +443,19 @@ def create_header():
             st.markdown("Dashboard Opérationnel (Niveau Floorshop/chaînes de production)")
         else:
             st.markdown("Dashboard Stratégique (Niveau direction générale)")
+    
+    # Display warning message if show_warning is True
+    if st.session_state.show_warning:
+        warning_col1, warning_col2 = st.columns([10, 1])
+        with warning_col1:
+            st.markdown("""
+            <div class="warning-message" text-color="red">
+                <span>⚠️ Warning: any empty fields in the database will affect the dashboard output</span>
+            </div>
+            """, unsafe_allow_html=True)
+        with warning_col2:
+            if st.button("✕", key="dismiss_warning"):
+                dismiss_warning()
 
 # Create filters
 def create_filters(data):
@@ -446,6 +550,19 @@ def create_filters(data):
             cnq_pct_min = st.number_input("%CNQ Min", min_value=0.0, max_value=100.0, step=1.0)
         with adv_col4:
             cnq_pct_max = st.number_input("%CNQ Max", min_value=0.0, max_value=100.0, step=1.0)
+            
+        # Add rework factor input
+        st.subheader("Paramètres de calcul")
+        rework_col1, rework_col2 = st.columns(2)
+        with rework_col1:
+            rework_factor = st.number_input("Facteur retouche", min_value=1.0, max_value=10.0, value=float(st.session_state.rework_factor), step=0.1)
+            # Update session state
+            if rework_factor != st.session_state.rework_factor:
+                st.session_state.rework_factor = rework_factor
+                # Force data reload when factor changes
+                if st.button("Appliquer le nouveau facteur retouche"):
+                    st.cache_data.clear()
+                    st.rerun()
     
     # Return filter values
     filters = {
@@ -457,7 +574,8 @@ def create_filters(data):
         "cnq_min": cnq_min if cnq_min > 0 else None,
         "cnq_max": cnq_max if cnq_max > 0 else None,
         "cnq_pct_min": cnq_pct_min if cnq_pct_min > 0 else None,
-        "cnq_pct_max": cnq_pct_max if cnq_pct_max > 0 else None
+        "cnq_pct_max": cnq_pct_max if cnq_pct_max > 0 else None,
+        "rework_factor": rework_factor
     }
     
     return filters
@@ -467,21 +585,47 @@ def create_metrics(filtered_data):
     # Calculate metrics
     total_cnq = filtered_data['CNQ'].sum() if 'CNQ' in filtered_data.columns else 0
     
-    # Calculate weighted average CNQ percentage
-    if 'CNQ_Percentage' in filtered_data.columns and 'Quantite' in filtered_data.columns:
-        cnq_percentage = (filtered_data['CNQ'] / filtered_data['Quantite'].replace(0, np.nan)).mean() * 100
+    # Calculate weighted average CNQ percentage with reasonable limits
+    if 'ValeurOF' in filtered_data.columns and filtered_data['ValeurOF'].sum() > 0:
+        # Use ValeurOF as the base for percentage calculation
+        cnq_percentage = (filtered_data['CNQ'].sum() / filtered_data['ValeurOF'].sum()) * 100
+    elif 'Quantite' in filtered_data.columns and filtered_data['Quantite'].sum() > 0:
+        # Fallback to using quantity with assumed unit price
+        unit_price = 100  # Assumed price per unit
+        total_value = filtered_data['Quantite'].sum() * unit_price
+        cnq_percentage = (filtered_data['CNQ'].sum() / total_value) * 100
     else:
+        # Use the pre-calculated percentage if available
         cnq_percentage = filtered_data['CNQ_Percentage'].mean() if 'CNQ_Percentage' in filtered_data.columns else 0
+
+    # Cap the percentage at a reasonable maximum
+    cnq_percentage = min(cnq_percentage, 100)
     
     retouche = filtered_data['Retouche'].sum() if 'Retouche' in filtered_data.columns else 0
     rebut = filtered_data['Rebut'].sum() if 'Rebut' in filtered_data.columns else 0
+    penalite = filtered_data['Penalite'].sum() if 'Penalite' in filtered_data.columns else 0
+    
+    # Get average costs per unit
+    cout_retouche_unitaire = filtered_data['CoutRetoucheUnitaire'].mean() if 'CoutRetoucheUnitaire' in filtered_data.columns else 0
+    cout_rebut_unitaire = filtered_data['CoutRebutUnitaire'].mean() if 'CoutRebutUnitaire' in filtered_data.columns else 0
+    
+    # Display calculation summary
+    st.markdown("### CNQ Calculation Summary")
+    st.markdown(f"""
+    | Component | Formula | Total |
+    |-----------|---------|-------|
+    | Retouche | Qté avec défaut × Coût Retouche Unitaire | **{retouche:,.2f} TND** |
+    | Rebut | Qté coupée × Coût Rebut Unitaire | **{rebut:,.2f} TND** |
+    | Pénalité | Somme des pénalités | **{penalite:,.2f} TND** |
+    | **CNQ Total** | Retouche + Rebut + Pénalité | **{total_cnq:,.2f} TND** |
+    """)
     
     # Create metrics cards
     metrics = [
-        {"title": "CNQ", "value": f"{total_cnq:,.0f} €", "icon": "fas fa-chart-line", "desc": "Coût de la non qualité"},
+        {"title": "CNQ", "value": f"{total_cnq:,.0f} TND", "icon": "fas fa-chart-line", "desc": "Coût de la non qualité"},
         {"title": "%CNQ", "value": f"{cnq_percentage:.2f}%", "icon": "fas fa-percentage", "desc": "Taux de Coût de non qualité"},
-        {"title": "Retouche", "value": f"{retouche:,.0f} €", "icon": "fas fa-tools", "desc": "Coût des retouches"},
-        {"title": "Rebut", "value": f"{rebut:,.0f} €", "icon": "fas fa-trash-alt", "desc": "Coût rebut des pièces déclassées"}
+        {"title": "Retouche", "value": f"{retouche:,.0f} TND", "icon": "fas fa-tools", "desc": f"Coût des retouches (moy: {cout_retouche_unitaire:.2f} TND/unité)"},
+        {"title": "Rebut", "value": f"{rebut:,.0f} TND", "icon": "fas fa-trash-alt", "desc": f"Coût rebut (moy: {cout_rebut_unitaire:.2f} TND/unité)"}
     ]
     
     # Display metrics in columns
@@ -504,7 +648,10 @@ def create_metrics(filtered_data):
         "total_cnq": total_cnq,
         "cnq_percentage": cnq_percentage,
         "retouche": retouche,
-        "rebut": rebut
+        "rebut": rebut,
+        "penalite": penalite,
+        "cout_retouche_unitaire": cout_retouche_unitaire,
+        "cout_rebut_unitaire": cout_rebut_unitaire
     }
 
 # Create main dashboard charts
@@ -538,7 +685,7 @@ def create_dashboard_charts(filtered_data, metrics):
         # Calculate components for pie chart
         retouche = metrics["retouche"]
         rebut = metrics["rebut"]
-        penalite = filtered_data['Penalite'].sum() if 'Penalite' in filtered_data.columns else 0
+        penalite = metrics["penalite"] if "penalite" in metrics else filtered_data['Penalite'].sum() if 'Penalite' in filtered_data.columns else 0
         
         # Create pie chart data
         labels = ['Retouche', 'Rebut', 'Pénalité']
@@ -744,14 +891,14 @@ def create_dashboard_charts(filtered_data, metrics):
             # Sort by CNQ descending and take top 10
             top_data = top_data.sort_values('CNQ', ascending=False).head(10)
             
-            # Create horizontal bar chart
+            # Create horizontal bar chart - SWITCHED X AND Y AXES
             bar_fig = px.bar(
                 top_data,
-                y=chain_col,
-                x=['Retouche', 'Rebut', 'Penalite'],
+                x=chain_col,
+                y=['Retouche', 'Rebut', 'Penalite'],
                 title="Top 10 Chaînes par CNQ",
                 template="plotly_dark",
-                orientation='h',
+                orientation='v',
                 barmode='stack'
             )
             
@@ -769,9 +916,9 @@ def create_dashboard_charts(filtered_data, metrics):
     
     # Operation tab
     with category_tabs[1]:
-        if 'Operation' in filtered_data.columns and not filtered_data.empty:
+        if 'IDOperation' in filtered_data.columns and not filtered_data.empty:
             # Group by Operation and calculate metrics
-            top_data = filtered_data.groupby('Operation').agg({
+            top_data = filtered_data.groupby('IDOperation').agg({
                 'CNQ': 'sum',
                 'Retouche': 'sum',
                 'Rebut': 'sum',
@@ -781,14 +928,14 @@ def create_dashboard_charts(filtered_data, metrics):
             # Sort by CNQ descending and take top 10
             top_data = top_data.sort_values('CNQ', ascending=False).head(10)
             
-            # Create horizontal bar chart
+            # Create horizontal bar chart - SWITCHED X AND Y AXES
             bar_fig = px.bar(
                 top_data,
-                y='Operation',
-                x=['Retouche', 'Rebut', 'Penalite'],
+                x='IDOperation',
+                y=['Retouche', 'Rebut', 'Penalite'],
                 title="Top 10 Opérations par CNQ",
                 template="plotly_dark",
-                orientation='h',
+                orientation='v',
                 barmode='stack'
             )
             
@@ -828,14 +975,14 @@ def create_dashboard_charts(filtered_data, metrics):
             # Sort by CNQ descending and take top 10
             top_data = top_data.sort_values('CNQ', ascending=False).head(10)
             
-            # Create horizontal bar chart
+            # Create horizontal bar chart - SWITCHED X AND Y AXES
             bar_fig = px.bar(
                 top_data,
-                y=controller_col,
-                x=['Retouche', 'Rebut', 'Penalite'],
+                x=controller_col,
+                y=['Retouche', 'Rebut', 'Penalite'],
                 title="Top 10 Contrôleurs par CNQ",
                 template="plotly_dark",
-                orientation='h',
+                orientation='v',
                 barmode='stack'
             )
             
@@ -899,7 +1046,7 @@ def create_analytics_page(data):
             {'label': 'Contrôleur', 'value': 'idcontroleur'},
             {'label': 'Contrôleur', 'value': 'IDcontroleur'},
             {'label': 'Contrôleur', 'value': 'IDControleur'},
-            {'label': 'Contrôleur', 'value': 'Controleur'},
+            {'label': 'Controleur', 'value': 'Controleur'},
             {'label': 'Jour', 'value': 'DATE'},
             {'label': 'Mois', 'value': 'Month'},
             {'label': 'Année', 'value': 'Year'}
@@ -1263,7 +1410,7 @@ def dashboard_page(data):
     else:
         # Create header
         create_header()
-        
+            
         # Create filters
         filters = create_filters(data)
         
@@ -1282,8 +1429,11 @@ def dashboard_page(data):
 
 # Main app
 def main():
-    # Load data
-    data = load_data()
+    # Clear all caches on startup
+    st.cache_data.clear()
+    
+    # Load data with version parameter to force cache reset
+    data = load_data(version=10)  # Use a higher version number
     
     # Show appropriate page based on authentication status and current page
     if not st.session_state.authenticated:
@@ -1303,3 +1453,4 @@ def main():
 # Run the app
 if __name__ == "__main__":
     main()
+
